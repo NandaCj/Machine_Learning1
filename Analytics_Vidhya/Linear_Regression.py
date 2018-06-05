@@ -33,6 +33,8 @@ class Linear_Regression:
 if __name__ == "__main__":
     obj = Linear_Regression()
     Feature, Value =  obj.Sample_Dataset_For_Linear_Regression()
+    Feature = np.array([1, 2, 3, 4, 5])
+    Value = np.array([5, 6, 7, 8, 9])
     Helpers().Print_Type_And_Value(Feature, Value)
     obj.Predict_With_Linear_Regression(Feature, Value, 5)
     #obj.Predict_With_Linear_Regression()

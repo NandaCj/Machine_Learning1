@@ -1,5 +1,7 @@
 from recommendations import critics
 from math import sqrt
+from Helpers import Helpers
+#https://github.com/nico/collectiveintelligence-book/blob/master/recommendations.py
 
 def sim_pearson(prefs,p1,p2):
     # Get the list of mutually rated items
@@ -34,6 +36,26 @@ def sim_pearson(prefs,p1,p2):
     print (num , den)
     return r
 
+from scipy.stats import pearsonr
+from Analytics_Vidhya.Linear_Regression import Linear_Regression
+import numpy as np
+
+def Pearsonr(x, y):
+    Helpers().List_Print(x, y)
+    R = pearsonr(x, y)
+    print("Pearson R value:", R)
+    return R
+
+
+x = [1,2,3,4,5]
+y = [12,96,-100,-500,111]
+Feature = np.array(x)
+Value = np.array(y)
+Helpers().Print_Type_And_Value(Feature, Value)
+Pearsonr(x, y)
+Linear_Regression().Predict_With_Linear_Regression(Feature, Value, 5)
+
+
 Age_Income = {
                 'City':{'Age':20 , 'Salary':8000, 'Age1':30 , 'Salary1':4500, 'Age2':40 , 'Salary2':6500, },
                 'Village':{'Age':20 , 'Salary':8000*2, 'Age1':30 , 'Salary1':4500*2, 'Age2':40 , 'Salary2':6500*2, },
@@ -41,9 +63,5 @@ Age_Income = {
                 'Rasika':{'Age':50 , 'Salary':50000},
               }
 # r = sim_pearson(critics, 'Gene Seymour', 'Toby')
-r = sim_pearson(Age_Income, 'Village', 'Rasika')
-
-print (r)
-
-# 0.396059017191
-
+# r = sim_pearson(Age_Income, 'Village', 'Rasika')
+# print (r)

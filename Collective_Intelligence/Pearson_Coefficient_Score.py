@@ -37,7 +37,8 @@ def sim_pearson(prefs,p1,p2):
     return r
 
 from scipy.stats import pearsonr
-from Analytics_Vidhya.Linear_Regression import Linear_Regression
+#from Analytics_Vidhya.Linear_Regression import Linear_Regression
+
 import numpy as np
 
 def Pearsonr(x, y):

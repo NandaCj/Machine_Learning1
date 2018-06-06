@@ -20,5 +20,7 @@ if __name__ == "__main__":
     matplot = Matplot()
     X_Values = [1, 3, 5, 7, 9]
     Y_Values = [2, 12, 5, 8, 10]
-    matplot.Line_Plot(X_Values, Y_Values)
+    matplot.Line_Plot("X_Values", X_Values, "Y_Values", Y_Values)
+
+
 

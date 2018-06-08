@@ -5,6 +5,7 @@ Log_Format = "%(asctime)s %(levelname)s [%(name)s] %(message)s"
 logging.basicConfig(level='DEBUG', format=Log_Format)
 logger = logging.getLogger(__name__)
 Info = logger.info
+Critical = logger.critical
 
 Pickle_File = "Pickle_Dump"
 

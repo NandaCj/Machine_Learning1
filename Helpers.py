@@ -1,5 +1,10 @@
 import pickle
+import logging
 
+Log_Format = "%(asctime)s %(levelname)s [%(name)s] %(message)s"
+logging.basicConfig(level='DEBUG', format=Log_Format)
+logger = logging.getLogger(__name__)
+Info = logger.info
 
 Pickle_File = "Pickle_Dump"
 
@@ -24,3 +29,13 @@ class Helpers:
         Loaded_Object = pickle.load(File_Object)
 
         return Loaded_Object
+
+class StartLogging:
+
+    def __init__(self, log_level='DEBUG'):
+        logging.basicConfig(level=log_level)
+        logger = logging.getLogger(log_level)
+        global Info
+        Info = logger.info
+
+

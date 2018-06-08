@@ -53,7 +53,10 @@ def pearson(v1, v2):
 
 def pearson_dist(v1, v2):
   """0.0 means "near", 1.0 means "far"."""
-  return 1 - pearson(v1, v2)
+  pearson_distance = 1 - pearson(v1, v2)
+  Info("Pearson Distance :{}".format(pearson_distance))
+
+  return pearson_distance
 
 
 class bicluster(object):
@@ -111,6 +114,7 @@ def hcluster(rows, distance=pearson_dist):
     Info("Length of Cluster is greated than 1 Clust Len : {}".format(len(clust)))
     lowestpair = 0, 1
     Info("Lowest Pair :{}".format(lowestpair))
+    Info("Calculating the Pearson R for the pair lowest pair{}".format(lowestpair))
     closest = distance(clust[0].vec, clust[1].vec)
     Info("Closest Distance -->:{}".format(closest))
 
@@ -124,10 +128,14 @@ def hcluster(rows, distance=pearson_dist):
         # function arguments. as clust shrinks, we can't just cache on indices
         # either)
         Info("Distances ---->{}".format(distances))
+
         if (clust[i].id,clust[j].id) not in distances:
-          Info("Below Clust ids are not in distances")
-          Info("Cluster Ids i={} j{}".format(i, j))
+          Info("Below Clust ids are not in distances hence finding Pearson Distance and adding them to distances Dict")
+          Info("Cluster Ids i={} j={}".format(i, j))
           distances[(clust[i].id,clust[j].id)] = distance(clust[i].vec,clust[j].vec)
+          Info("Distances Dict:".format(distances))
+
+
         d = distances[(clust[i].id,clust[j].id)]
         Info("Current Clusters Distance :{}".format(d))
         Info("Comparing the Current Clusters Distance {} with closest Distance {}".format(closest, d))

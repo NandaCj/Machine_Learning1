@@ -1,5 +1,6 @@
 from math import sqrt
 import random
+from Helpers.Logging import *
 
 
 def readfile(filename):
@@ -22,7 +23,7 @@ def pearson(v1, v2):
 
   1.0 means very similar and 0.0 means no correlation. -1.0 means
   anticorrelation.  v1 and v2 must have the same number of elements."""
-
+  Info("Calculating Pearson R value ")
   assert len(v1) == len(v2)
 
   n = len(v1)
@@ -45,8 +46,9 @@ def pearson(v1, v2):
     # cases, this function can't figure out how to "scale" its result. Cop
     # out and simply return 0 for those cases.
     return 0
-
-  return num/den
+  R = num/den
+  Info("Pearson R value: {}".format(R))
+  return R
 
 
 def pearson_dist(v1, v2):
@@ -56,6 +58,7 @@ def pearson_dist(v1, v2):
 
 class bicluster(object):
   def __init__(self, vec, left=None, right=None, distance=0.0, id=None):
+    Info("Preparing bicluster for vec :{} and \n  id :{}".format(vec, id ))
     self.vec = vec
     self.left = left
     self.right = right
@@ -63,6 +66,7 @@ class bicluster(object):
     self.id = id
 
   def __eq__(self, b):
+    Info("Inside __eq__")
     return (self.vec == b.vec
         and self.left == b.left
         and self.right == b.right
@@ -72,6 +76,7 @@ class bicluster(object):
   # If we have __eq__, we better have __ne__ too
   # so that `not (a == b) == a != b`
   def __ne__(self, b):
+    Info("Inside __ne__")
     return not (self == b)
 
   # If we have __eq__, we better have __hash__ too
@@ -79,9 +84,11 @@ class bicluster(object):
   # as dict keys, it's ok if this function fails loudly (instead of silently
   # returning a wrong value, which is the defaul)
   def __hash__(self):
+    Info("Inside __hash__")
     raise NotImplementedError
 
   def __str__(self):
+    Info("Inside __str__")
     return '%s %f %d (%s %s)' % (str(self.vec), self.distance, self.id,
         self.left, self.right)
 
@@ -96,28 +103,40 @@ def hcluster(rows, distance=pearson_dist):
 
   # Clusters start off as just rows
   clust = [bicluster(rows[i], id=i) for i in range(len(rows))]
+  Info("Cluster Formed from Bicluster : {} -->{}".format(type(clust),clust))
 
   # O(n^3), yuck! Effectively, only the distance() calls are expensive,
   # and we cache them, so this is really O(n^2)
   while len(clust) > 1:
+    Info("Length of Cluster is greated than 1 Clust Len : {}".format(len(clust)))
     lowestpair = 0, 1
+    Info("Lowest Pair :{}".format(lowestpair))
     closest = distance(clust[0].vec, clust[1].vec)
+    Info("Closest Distance -->:{}".format(closest))
 
     # Loop through every pair looking for the smallest distance
     for i in range(len(clust)):
+      Info("First Looping Through the Clust Length :{}".format(i))
       for j in range(i + 1, len(clust)):
+        Info("Second Looping Through the Clust Length :{}".format(j))
         # cache distances. Makes this much faster.
         # (can't use the cache() function because we cache on ids, not
         # function arguments. as clust shrinks, we can't just cache on indices
         # either)
-        if (clust[i].id,clust[j].id) not in distances: 
-          distances[(clust[i].id,clust[j].id)] = distance(
-              clust[i].vec,clust[j].vec)
+        Info("Distances ---->{}".format(distances))
+        if (clust[i].id,clust[j].id) not in distances:
+          Info("Below Clust ids are not in distances")
+          Info("Cluster Ids i={} j{}".format(i, j))
+          distances[(clust[i].id,clust[j].id)] = distance(clust[i].vec,clust[j].vec)
         d = distances[(clust[i].id,clust[j].id)]
-        
+        Info("Current Clusters Distance :{}".format(d))
+        Info("Comparing the Current Clusters Distance {} with closest Distance {}".format(closest, d))
         if d < closest:
+          Info("Current Cluster distance {}is closer than closest distance{} Hence chaging closet distance to current clust dist "\
+               .format(closest, d))
           closest = d
           lowestpair = i, j
+          Info("Changing Lowest Pair")
 
     # Merge closest pair into a single vector
     mergevec = mergevecs(clust[lowestpair[0]].vec, clust[lowestpair[1]].vec)
@@ -191,7 +210,7 @@ def kcluster(rows, distance=pearson_dist, k=4):
     # find best centroid for each row
     for j in range(len(rows)):
       bestmatches[getnearest(rows[j], clusters, distance)].append(j)
-      
+
     # if the results didn't change in this iteration, we are done
     if bestmatches == lastmatches: break
     lastmatches = bestmatches

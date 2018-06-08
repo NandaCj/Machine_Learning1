@@ -133,18 +133,20 @@ def hcluster(rows, distance=pearson_dist):
           Info("Below Clust ids are not in distances hence finding Pearson Distance and adding them to distances Dict")
           Info("Cluster Ids i={} j={}".format(i, j))
           distances[(clust[i].id,clust[j].id)] = distance(clust[i].vec,clust[j].vec)
-          Info("Distances Dict:".format(distances))
+          Info("Distances Dict: {}".format(distances))
 
 
         d = distances[(clust[i].id,clust[j].id)]
         Info("Current Clusters Distance :{}".format(d))
-        Info("Comparing the Current Clusters Distance {} with closest Distance {}".format(closest, d))
+        Info("Comparing the Current Clusters Distance {} with lowest Distance {}".format(closest, d))
         if d < closest:
           Info("Current Cluster distance {}is closer than closest distance{} Hence chaging closet distance to current clust dist "\
                .format(closest, d))
           closest = d
           lowestpair = i, j
           Info("Changing Lowest Pair")
+        else:
+            Info("Current Cluster distance is not Less than the Lowest Distance")
 
     # Merge closest pair into a single vector
     mergevec = mergevecs(clust[lowestpair[0]].vec, clust[lowestpair[1]].vec)

@@ -224,8 +224,10 @@ def sampletrain(cl):
   cl.train('Nobody owns the water.', 'good')
   cl.train('the quick rabbit jumps fences', 'good')
   cl.train('buy pharmaceuticals now', 'bad')
-  cl.train('make quick money at the online casino', 'bad')
-  cl.train('the quick brown fox jumps', 'good')
+  cl.train('make black money at the online casino', 'bad')
+  cl.train('the black brown fox jumps', 'ok')
+  cl.train('the blue brown fox jumps', 'ok')
+  cl.train('the green brown fox jumps', 'ok')
 
 
 if __name__ == '__main__':
@@ -240,8 +242,8 @@ if __name__ == '__main__':
   for Word, Count in cl.fc.items():
     print("{} \t {}".format(Word, Count))
 
-  word = 'quick'
-  classification =  'good'
+  word = 'black'
+  classification =  'bad'
   print("Probablity of \"{}\" in the \"{}\" classification ".format(word, classification))
   print ("Count of \"{}\" in \"{}\" --> \"{}\"".format(word, classification, cl.fcount(word, classification)))
   print ("Total Count of classification \"{}\" -->  {}".format(classification, cl.catcount(classification)))

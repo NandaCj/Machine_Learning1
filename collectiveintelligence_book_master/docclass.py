@@ -2,19 +2,22 @@ import collections
 import math
 import operator
 import re
-
-from pysqlite2 import dbapi2 as sqlite
+from Helpers.Logging import *
+from sqlite3 import dbapi2 as sqlite
 
 
 def getwords(doc):
+  Info("Getting Words..")
   splitter = re.compile(r'\W*')
   words = [s.lower() for s in splitter.split(doc) if 2 < len(s) < 20]
+  Info("Words in the Doc... \n {}".format(set(words)))
   return set(words)
 
 
 class classifier(object):
 
   def __init__(self, getfeatures, filename=None):
+    Info("Classifier .. Getfeature {}".format(getfeatures))
     # Counts of ofeature/category combinations
     self.fc = collections.defaultdict(lambda: collections.defaultdict(int))
 
@@ -53,35 +56,33 @@ class classifier(object):
   #def categories(self):
     #return self.cc.keys()
 
+    # Increase the count of a feature/category pair
   def incf(self, f, cat):
-    count = self.fcount(f, cat)
-    if count == 0:
-      self.con.execute('insert into fc values ("%s", "%s", 1)' % (f, cat))
-    else:
-      self.con.execute(
-          'update fc set count = %d where feature="%s" and category="%s"'
-          % (count + 1, f, cat))
+    # Info("Increasing the count of the feature...")
+    self.fc.setdefault(f, {})
+    self.fc[f].setdefault(cat, 0)
+    self.fc[f][cat] += 1
+    # Info("Count of Feature per category: {}".format(self.fc))
 
+  # Increase the count of a category
   def incc(self, cat):
-    count = self.catcount(cat)
-    if count == 0:
-      self.con.execute('insert into cc values ("%s", 1)' % cat)
-    else:
-      self.con.execute(
-          'update cc set count = %d where category="%s"' % (count + 1, cat))
+    # Info("Increasing the Count of Category...")
+    self.cc.setdefault(cat, 0)
+    self.cc[cat] += 1
+    # Info("Count of total number of time category called {}".format(self.cc))
 
+  # The number of times a feature has appeared in a category
   def fcount(self, f, cat):
-    res = self.con.execute(
-        'select count from fc where feature="%s" and category="%s"'
-        % (f, cat)).fetchone()
-    if not res: return 0.0
-    return float(res[0])
+    if f in self.fc and cat in self.fc[f]:
+      return float(self.fc[f][cat])
+    return 0.0
 
+
+  # The number of items in a category
   def catcount(self, cat):
-    res = self.con.execute(
-        'select count from cc where category="%s"' % cat).fetchone()
-    if not res: return 0.0
-    return float(res[0])
+    if cat in self.cc:
+      return float(self.cc[cat])
+    return 0
 
   def totalcount(self):
     res = self.con.execute('select sum(count) from cc').fetchone()
@@ -93,6 +94,7 @@ class classifier(object):
     return [d[0] for d in cur]
 
   def train(self, item, cat):
+    Info("\n Item :{} \n Categtory :{}".format(item, cat))
     features = self.getfeatures(item)
     for f in features:
       self.incf(f, cat)
@@ -107,6 +109,7 @@ class classifier(object):
     """Returns P(f | cat), i.e. chance that a document in category cat contains
     the given feature."""
     if self.catcount(cat) == 0: return 0.0
+
     return self.fcount(f, cat)/self.catcount(cat)
 
   def weightedprob(self, f, cat, prf, weight=1.0, ap=0.5):
@@ -217,6 +220,7 @@ class fisherclassifier(classifier):
 
 
 def sampletrain(cl):
+  Info("Training Sample ...")
   cl.train('Nobody owns the water.', 'good')
   cl.train('the quick rabbit jumps fences', 'good')
   cl.train('buy pharmaceuticals now', 'bad')
@@ -227,5 +231,20 @@ def sampletrain(cl):
 if __name__ == '__main__':
   cl = classifier(getwords)
   sampletrain(cl)
-  print cl.fcount('quick', 'good')
-  print cl.fcount('quick', 'bad')
+  print("Classification \t Count \t \n")
+  for Classification, ClassificationCount in cl.cc.items():
+    print(" {} \t {}".format(Classification, ClassificationCount))
+
+
+  print ("Word \t Count ")
+  for Word, Count in cl.fc.items():
+    print("{} \t {}".format(Word, Count))
+
+  word = 'quick'
+  classification =  'good'
+  print("Probablity of \"{}\" in the \"{}\" classification ".format(word, classification))
+  print ("Count of \"{}\" in \"{}\" --> \"{}\"".format(word, classification, cl.fcount(word, classification)))
+  print ("Total Count of classification \"{}\" -->  {}".format(classification, cl.catcount(classification)))
+  print(cl.fprob(word, classification))
+  # print cl.fcount('quick', 'good')
+  # print cl.fcount('quick', 'bad')

@@ -97,7 +97,9 @@ class bicluster(object):
 
 
 def mergevecs(a, b):
-  return [(a[i] + b[i])/2.0 for i in range(len(a))]
+  mergevec = [(a[i] + b[i]) / 2.0 for i in range(len(a))]
+  Info ("\n a = {} \n b= {} \n mergevec = {}".format(a , b, mergevec))
+  return mergevec
 
 
 def hcluster(rows, distance=pearson_dist):
@@ -149,8 +151,9 @@ def hcluster(rows, distance=pearson_dist):
             Info("Current Cluster distance is not Less than the Lowest Distance")
 
     # Merge closest pair into a single vector
+    Info("MergeVec started...")
     mergevec = mergevecs(clust[lowestpair[0]].vec, clust[lowestpair[1]].vec)
-
+    Info("Left = {} \n right = {}".format(lowestpair[0], lowestpair[1]))
     newcluster = bicluster(mergevec, left=clust[lowestpair[0]],
         right=clust[lowestpair[1]], distance=closest, id=currentclustid)
 

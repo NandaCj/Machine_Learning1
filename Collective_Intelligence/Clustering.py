@@ -2,7 +2,7 @@ from Helpers.Logging import *
 import os
 from collectiveintelligence_book_master import clusters
 
-
+S = "************************************* \n"
 blogdata = os.path.dirname(os.path.dirname(__file__)) + '/collectiveintelligence_book_master/blogdata.txt'
 print (blogdata)
 class Clustering :
@@ -14,6 +14,7 @@ class Clustering :
         Info("{} --> {} --> {}".format(type(data), len(data), data))
 
         clust = clusters.hcluster(data)
+        print (S, clust.vec, S)
 
 
 

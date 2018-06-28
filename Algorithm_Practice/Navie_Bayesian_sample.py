@@ -11,8 +11,9 @@ say in prediction Y the 1 means Good word
       
 
 """
+""" money terror betting god"""
 #assigning predictor and target variables
-x= np.array([[3, 0],[0,3]])
+x= np.array([[5,0,1,3],[4,3,1,2]])
 Y= np.array([1, 0])
 #Create a Gaussian Classifier
 model = GaussianNB()
@@ -21,5 +22,5 @@ model = GaussianNB()
 model.fit(x, Y)
 
 #Predict Output
-predicted= model.predict([[3,1]])
+predicted= model.predict([[3,0,3,1]])
 print predicted

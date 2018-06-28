@@ -1,12 +1,12 @@
 import numpy as np
 
 List = [1, 2, 3]
-Dtype = np.dtype([('FirstValue', 'S20'), ('SecondValue', 'f4')])
-#Dtype = np.dtype([('name','f4')])
+Dtype = np.dtype([('FirstValue', 'f4'), ('SecondValue', 'f4')])
+
 Array = np.array([List, List, List], dtype=Dtype)
 print (Array)
 for i in Array:
-    print("Each in Array", type(i), i)
+    print("Each in Array", type(j), j)
     # for j in i:
     #     print("Each in Array", type(j), j)
 

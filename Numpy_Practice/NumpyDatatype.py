@@ -6,7 +6,7 @@ Dtype = np.dtype([('FirstValue', 'f4'), ('SecondValue', 'f4')])
 Array = np.array([List, List, List], dtype=Dtype)
 print (Array)
 for i in Array:
-    print("Each in Array", type(j), j)
+    print("Each in Array", type(i), i)
     # for j in i:
     #     print("Each in Array", type(j), j)
 

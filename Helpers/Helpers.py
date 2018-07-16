@@ -1,5 +1,6 @@
 import pickle
 import logging
+import numpy as np
 
 Log_Format = "%(asctime)s %(levelname)s [%(name)s] %(message)s"
 logging.basicConfig(level='DEBUG', format=Log_Format)
@@ -17,7 +18,11 @@ class Helpers:
     def Print_Type_And_Value(self, *args):
         print("************************************************")
         for arg in args:
+
+            print ("Total Length of Argument : ", len(arg))
             print ("Argument Type :", type(arg), "\n")
+            if isinstance(arg, (np.ndarray)):
+                print ("--->Array Shape ", arg.shape)
             print ("Argument Value :", arg, "\n")
         print ("************************************************")
 

@@ -1,0 +1,24 @@
+class Capture_Profiler_Errors_And_Exception:
+    def __init__(self, Func):
+        self.Func = Func
+
+    def __call__(self, *args, **kwargs):
+        listen = Listener(hostname='10.0.10.130')
+        print("Arguments Passed to Decorator", args)
+        listen.start_listen(ise_logs['PROFILERSENSORLOG'], verbose=False)
+        cfg.ad_hoc_listener.append(listen)
+        self.Func(self)
+        LOG = listen.get_data()
+        errors = re.findall(r'.*ERROR.*', LOG)
+        exceptions = re.findall(r'.*Exception.*', LOG)
+        errors_and_exception = errors + exceptions
+        print("#########__ERRORS_AND_EXCEPTIION__########")
+        for i in errors_and_exception:
+            print(i)
+        print("#########__ERRORS_AND_EXCEPTIION__########")
+
+    def listen_profiler_log_errors_and_exception(self, ise_ip, log=ise_logs['PROFILERSENSORLOG']):
+        listen = Listener(hostname=ise_ip)
+        listen.start_listen(log, verbose=False)
+        cfg.ad_hoc_listener.append(listen)
+        return listen

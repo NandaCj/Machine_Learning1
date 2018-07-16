@@ -1,5 +1,6 @@
 from sklearn import linear_model
-from Helpers import Helpers
+from Helpers.Helpers import Helpers
+from sklearn.cross_validation import train_test_split
 import numpy as np
 
 class Linear_Regression:
@@ -19,22 +20,23 @@ class Linear_Regression:
         # Feature = Feature.values.reshape(-1, 1)
         # Test = Test.values.reshape(-1, 1)
 
-        Value = Value.reshape(-1, 1)
-        Feature = Feature.reshape(-1, 1)
+        # Value = Value.reshape(-1, 1)
+        # Feature = Feature.reshape(-1, 1)
         # Test = Test.reshape(-1, 1)
+        Helpers().Print_Type_And_Value(Feature, Value)
 
         print ("Fitting :",linear.fit(Feature, Value))
         print ("Score :",linear.score(Feature, Value))
         print('Coefficient: \n', linear.coef_)
         print('Intercept: \n', linear.intercept_)
-        predicted = linear.predict(Test)
-        print ("Predicted :",predicted)
+        # predicted = linear.predict(Test)
+        # print ("Predicted :",predicted)
 
 if __name__ == "__main__":
     obj = Linear_Regression()
     Feature, Value =  obj.Sample_Dataset_For_Linear_Regression()
-    Feature = np.array([1, 2, 3, 4, 5])
-    Value = np.array([5, 6, 7, 8, 9])
+    Feature = np.array([[1, 2, 3, 4, 5],[1,2,3,4,5]])
+    Value = np.array([[5], [6]])
     Helpers().Print_Type_And_Value(Feature, Value)
     obj.Predict_With_Linear_Regression(Feature, Value, 5)
     #obj.Predict_With_Linear_Regression()

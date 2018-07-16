@@ -1,7 +1,7 @@
 import pymongo
 from pymongo import MongoClient
 import re
-
+from Helpers.Logging import *
 
 
 class Connection:
@@ -10,7 +10,10 @@ class Connection:
 
     @property
     def Connect(self):
+
         client = MongoClient('mongodb://localhost:27017/')
+
+
         return client
 
 if __name__ == "__main__":

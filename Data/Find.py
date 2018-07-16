@@ -16,7 +16,6 @@ class FindData:
         self.Db_Client = Connection().Connect
         Info("DB Clinet : {}".format(self.Db_Client))
 
-
     def Get_Stock_Codes(self):
         Info("Quering Stock Codes...")
         cursor = self.Db_Client.Stock_Info.Stock_List

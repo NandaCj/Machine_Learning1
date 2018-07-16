@@ -10,10 +10,7 @@ class Connection:
 
     @property
     def Connect(self):
-
         client = MongoClient('mongodb://localhost:27017/')
-
-
         return client
 
 if __name__ == "__main__":

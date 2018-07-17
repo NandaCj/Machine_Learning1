@@ -3,7 +3,7 @@ from pymongo import MongoClient
 import re
 import requests
 from lxml import html
-
+from Helpers.Logging import *
 client = MongoClient("mongodb://127.0.0.1:27017")
 
 db = client.ET
@@ -17,10 +17,11 @@ class GetBalanceSheet():
 	def GetBalanceSheetUrl (self):
 		Urls = list(db.ETUrls.find({},{"_id":0, "BalanceSheet":1}))
 		BalanceSheetUrl = Urls[0]['BalanceSheet']
+		Info("BalanceSheetUrl : {}".format(BalanceSheetUrl))
 		self.FormBalanceSheet(BalanceSheetUrl)
 
 	def FormBalanceSheet(self, BalanceSheetUrl):
-		ETdict = list(db.ETCompanyCodes.find({},{"_id":0}))
+		ETdict = list(db.ETCompanyCodes.find({},{"_id":0, "ELAND":1}))
 		ETdict = ETdict[0]
 		for StockId, ETId in ETdict.items():
 			if StockId == "BLUEBLENDS":
@@ -29,7 +30,7 @@ class GetBalanceSheet():
 			if ETId == 'NA':
 				continue
 			BUrl = re.sub('Code', ETId, BalanceSheetUrl)
-			print (StockId, BUrl)
+			Info("\n Stock Id : {} \n BalanceSheetUrl: {} ".format(StockId, BUrl))
 			try:
 				self.FilterBalanceSheet(StockId, BUrl)
 			except :

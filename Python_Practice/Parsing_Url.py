@@ -6,7 +6,8 @@ url = "https://economictimes.indiatimes.com/tvs-motor-company-ltd/balancesheet/c
 Response = requests.get(url)
 soup = BeautifulSoup(Response.text, 'html.parser')
 
-print(soup.find_all('tr')[3])
+print(soup.find_all('tr')[2])
+
 print (re.findall(r'Months',soup.find_all('tr')[3].get_text()))
 
 i = 0

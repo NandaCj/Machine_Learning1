@@ -4,7 +4,7 @@ from nsetools import Nse
 from datetime import date
 from datetime import datetime
 from Helpers.Logging import *
-# from Data.ET.Parse_ET_Balance_Sheet_Url import Parse_Balance_Sheet
+from Data.ET.Parse_ET_Balance_Sheet_Url import Parse_Balance_Sheet
 
 Test_Columns = ['Symbol', 'Series', 'Prev Close', 'Open', 'High', 'Low', 'Last', 'Close', 'VWAP', 'Volume',
                         'Turnover', 'Trades', 'Deliverable Volume', '%Deliverble']
@@ -51,12 +51,15 @@ class InsertData:
             Stock = Stock_ID["_id"]
             self.Insert_Stock_History(Stock=Stock)
 
-    # def Insert_Stock_Balance_Sheet(self):
-    #     # Balance_Sheet_Detail_Dict = Parse_Balance_Sheet()
-    #     pass
+    def Insert_Stock_Balance_Sheet(self, Stock_Id):
+        Obj = Parse_Balance_Sheet()
+        BalanceSheetDict = Obj.Parse_Balance_Sheet_Url(Stock_Id)
+        print (BalanceSheetDict)
+        cursor = self.Db_Client.Stock_Info.BalanceSheet
+        cursor.insert(BalanceSheetDict)
 
 if __name__ == "__main__":
     Obj = InsertData()
-    Obj.Insert_Stock_History('BHEL', )
+    Obj.Insert_Stock_Balance_Sheet('HDFC')
     #Obj.Get_Stock_Names_List()
     # Obj.Insert_Stock_History_All()

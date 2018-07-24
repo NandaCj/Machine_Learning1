@@ -1,10 +1,11 @@
-from DB import Connection
+from Data.DB import Connection
 from nsepy import get_history
 from nsetools import Nse
 from datetime import date
 from datetime import datetime
 from Helpers.Logging import *
 import re
+
 
 Test_Columns = ['Symbol', 'Series', 'Prev Close', 'Open', 'High', 'Low', 'Last', 'Close', 'VWAP', 'Volume',
                         'Turnover', 'Trades', 'Deliverable Volume', '%Deliverble']

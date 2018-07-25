@@ -1,34 +1,17 @@
 import requests
 from lxml.html import fromstring
 from bs4 import BeautifulSoup
-import re
+import re, os
 from Data.From_Db import FindData
 from Helpers.Logging import *
+from Common_Data import BalanceSheet_Param_Dict
+import configparser
 
-Param_Dict = {
-            "Share Capital": "Share_Capital",
-            "Reserves & Surplus": "Reserves_Surplus",
-            "Net Worth": "Net_Worth",
-            "Secured Loan": "Secured_Loan",
-            "Unsecured Loan": "Unsecured_Loan",
-            "TOTAL LIABILITIES": "Total_Liabilities",
-            "Gross Block": "Gross_Block",
-            "(-) Acc. Depreciation": "Depreciation",
-            "Net Block": "Net_Block",
-            "Capital Work in Progress": "Capital_Work_In_Progress",
-            "Investments": "Investments",
-            "Inventories": "Inventories",
-            "Sundry Debtors": "Sundry_Debtors",
-            "Cash and Bank": "Cash_and_Bank",
-            "Loans and Advances": "Loans_And_Advances",
-            "Total Current Assets": "Total_Current_Assets",
-            "Current Liabilities": "Current_Liabilities",
-            "Provisions": "Provisions",
-            "Total Current Liabilities": "Total_Current Liabilities",
-            "NET CURRENT ASSETS": "Net_Current_Assessts",
-            "Misc. Expenses": "Misc_Expenses",
-            "TOTAL ASSETS(A+B+C+D+E)":"Total_Assests",
-              }
+
+Config = configparser.ConfigParser()
+Config.read(os.path.dirname(os.path.realpath(__file__)) + "/ET_Config.ini")
+SHARE_CAPITAL_INDEX = int(Config.get("BALANCE_SHEET", "SHARE_CAPITAL_INDEX"))
+GROSS_BLOCK_INDEX = int(Config.get("BALANCE_SHEET", "GROSS_BLOCK_INDEX"))
 
 class Parse_Balance_Sheet:
 
@@ -39,57 +22,86 @@ class Parse_Balance_Sheet:
         Balance_Sheet_Years = re.findall(r'Months', Balance_Sheet_Page_Soup.find_all('tr')[3].get_text())
         Years_Of_Detail_avaliable = len(Balance_Sheet_Years)
         Info("Balance Sheet Data if Available for {} years ".format(Years_Of_Detail_avaliable))
-        Balance_Sheet_TD = Balance_Sheet_Page_Soup.find_all('tr')[2]
-        Years_Of_Detail_avaliable = re.findall(r'Mar...', str(Balance_Sheet_TD))
+        Balance_Sheet_Table_Data = Balance_Sheet_Page_Soup.find_all('tr')[2]
+        Years_Of_Detail_avaliable = re.findall(r'Mar...', str(Balance_Sheet_Table_Data))
         Info("Years_Of_Detail_avaliable {}".format(Years_Of_Detail_avaliable))
         return Years_Of_Detail_avaliable
 
     def Map_Attribute(self, Un_Formated_Attribute):
-        Mapped_Attribute_Name = Param_Dict[Un_Formated_Attribute]
+        Mapped_Attribute_Name = BalanceSheet_Param_Dict[Un_Formated_Attribute]
         return Mapped_Attribute_Name
 
-    def Five_Years_Data_Parse(self, Stock_Id, Balance_Sheet_Page_Soup, Years_Of_Detail_avaliable,):
-        Info("Five Years Data Parse...")
-        Share_Capital_Index = 14
-        Gross_Block_Index = 51
-        Balance_Sheet_TD =  Balance_Sheet_Page_Soup.find_all('td')
-        count = 0
+    def Form_BalanceSheet_Detail_Dict(self, count, Year, Balance_Sheet_Table_Data, From_Td, To_Td, Skip_Td):
+        global SHARE_CAPITAL_INDEX
 
-        BalanceSheet_Detail_Dict = {"_id":Stock_Id}
+        for Attribute_TD in Balance_Sheet_Table_Data[SHARE_CAPITAL_INDEX::6]:
+
+            Info("self.BalanceSheet_Detail_Dict : {}".format(self.BalanceSheet_Detail_Dict))
+            Info("Attribute_TD : {} , SHARE_CAPITAL_INDEX: {}".format(Attribute_TD, SHARE_CAPITAL_INDEX))
+            Attribute = Attribute_TD.get_text()
+            if Attribute == "Assets":
+
+                #SHARE_CAPITAL_INDEX = GROSS_BLOCK_INDEX
+                Info("**************** Continue *****************")
+                break
+            Formatted_Attribute_Name = self.Map_Attribute(Attribute)
+            Info("Formatted_Attribute_Name : {}".format(Formatted_Attribute_Name))
+            Info("From_Td : {} , To_Td : {} , Count : {}".format(From_Td, To_Td, count))
+            if Balance_Sheet_Table_Data[From_Td + count]:
+                Value_TD = Balance_Sheet_Table_Data[From_Td + count]
+                Info("Value_TD : {}".format(Value_TD))
+                Value = float(Value_TD.get_text())
+                Info("Value : {}".format(Value))
+
+                self.BalanceSheet_Detail_Dict[Year][Formatted_Attribute_Name] = Value
+
+            From_Td += 6
+            To_Td = From_Td
+
+
+    def Five_Years_Data_Parse(self, Stock_Id, Balance_Sheet_Page_Soup, Years_Of_Detail_avaliable,):
+        Balance_Sheet_Table_Data =  Balance_Sheet_Page_Soup.find_all('td')
+        count = 0
+        self.BalanceSheet_Detail_Dict = {"_id":Stock_Id}
+        count = 0
         for Year in Years_Of_Detail_avaliable:
             Info("Year :{}".format(Year))
-            First_Set_Data = Share_Capital_Index + 1
-            Second_Set_Data = Gross_Block_Index + 1
-            BalanceSheet_Detail_Dict[Year] = {}
-            Info(BalanceSheet_Detail_Dict)
-            for Attribute_TD in Balance_Sheet_TD[Share_Capital_Index:Gross_Block_Index-1:6]:
-                Attribute = Attribute_TD.get_text()
-                Formatted_Attribute_Name = self.Map_Attribute(Attribute)
+            First_Set_Data = SHARE_CAPITAL_INDEX + 1
+            Second_Set_Data = GROSS_BLOCK_INDEX + 1
+            self.BalanceSheet_Detail_Dict[Year] = {}
+            self.Form_BalanceSheet_Detail_Dict(count=count, Year=Year, Balance_Sheet_Table_Data= Balance_Sheet_Table_Data,
+                                               From_Td=First_Set_Data, To_Td=First_Set_Data, Skip_Td=len(Years_Of_Detail_avaliable))
+            count += 1
+            # self.Form_BalanceSheet_Detail_Dict(Year=Year, Balance_Sheet_Table_Data=Balance_Sheet_Table_Data,
+            #                                    From_Td=First_Set_Data, To_Td=First_Set_Data + 5,Skip_Td=len(Years_Of_Detail_avaliable))
+            # for Attribute_TD in Balance_Sheet_Table_Data[SHARE_CAPITAL_INDEX:GROSS_BLOCK_INDEX-1:6]:
+            #     Attribute = Attribute_TD.get_text()
+            #     Formatted_Attribute_Name = self.Map_Attribute(Attribute)
+            #
+            #     for Value_TD in Balance_Sheet_Table_Data[First_Set_Data:First_Set_Data+5][count]:
+            #         print("Value_TD",Value_TD)
+            #         Value = float(Value_TD.get_text())
+            #         print("Value", Value)
+            #
+            #         self.BalanceSheet_Detail_Dict[Year][Formatted_Attribute_Name] = Value_TD
+            #
+            #
+            #     First_Set_Data += 6
+            # Info(self.BalanceSheet_Detail_Dict)
+            # for Attribute_TD in Balance_Sheet_Table_Data[GROSS_BLOCK_INDEX::6]:
+            #     Attribute = Attribute_TD.get_text()
+            #     Formatted_Attribute_Name = self.Map_Attribute(Attribute)
+            #
+            #     for Value_TD in Balance_Sheet_Table_Data[Second_Set_Data:Second_Set_Data+5][count]:
+            #         Value = float(Value_TD.get_text())
+            #         self.BalanceSheet_Detail_Dict[Year][Formatted_Attribute_Name] = Value
+            #
+            #     Second_Set_Data += 6
 
-                for Value_TD in Balance_Sheet_TD[First_Set_Data:First_Set_Data+5][count]:
-                    print("Value_TD",Value_TD)
-                    # Value = float(Value_TD.get_text())
-                    # print("Value", Value)
-
-                    BalanceSheet_Detail_Dict[Year][Formatted_Attribute_Name] = Value_TD
-
-
-                First_Set_Data += 6
-            Info(BalanceSheet_Detail_Dict)
-            for Attribute_TD in Balance_Sheet_TD[Gross_Block_Index::6]:
-                Attribute = Attribute_TD.get_text()
-                Formatted_Attribute_Name = self.Map_Attribute(Attribute)
-
-                for Value_TD in Balance_Sheet_TD[Second_Set_Data:Second_Set_Data+5][count]:
-                    Value = float(Value_TD.get_text())
-                    BalanceSheet_Detail_Dict[Year][Formatted_Attribute_Name] = Value
-
-                Second_Set_Data += 6
-
-        for key, value in BalanceSheet_Detail_Dict.items():
+        for key, value in self.BalanceSheet_Detail_Dict.items():
             print(key ,"********", value)
 
-        return BalanceSheet_Detail_Dict
+        return self.BalanceSheet_Detail_Dict
 
 
 
@@ -117,4 +129,4 @@ class Parse_Balance_Sheet:
 
 if __name__ == "__main__":
     Obj = Parse_Balance_Sheet()
-    Obj.Parse_Balance_Sheet_Url(Stock_Id = 'BHEL')
+    Obj.Parse_Balance_Sheet_Url(Stock_Id = 'HDFC')

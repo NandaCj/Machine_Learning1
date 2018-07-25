@@ -2,7 +2,7 @@ import requests
 from lxml.html import fromstring
 from bs4 import BeautifulSoup
 import re
-url = "https://economictimes.indiatimes.com/tvs-motor-company-ltd/balancesheet/companyid-12940.cms"
+url = "https://economictimes.indiatimes.com/tvs-motor-company-ltd/balancesheet/companyid-9195.cms"
 Response = requests.get(url)
 soup = BeautifulSoup(Response.text, 'html.parser')
 

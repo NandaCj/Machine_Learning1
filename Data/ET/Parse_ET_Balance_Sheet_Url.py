@@ -31,10 +31,10 @@ class Parse_Balance_Sheet:
         Mapped_Attribute_Name = BalanceSheet_Param_Dict[Un_Formated_Attribute]
         return Mapped_Attribute_Name
 
-    def Form_BalanceSheet_Detail_Dict(self, count, Year, Balance_Sheet_Table_Data, From_Td, To_Td, Skip_Td):
+    def Form_BalanceSheet_Detail_Dict(self, Index , count, Year, Balance_Sheet_Table_Data, From_Td, To_Td, Skip_Td):
         global SHARE_CAPITAL_INDEX
 
-        for Attribute_TD in Balance_Sheet_Table_Data[SHARE_CAPITAL_INDEX::6]:
+        for Attribute_TD in Balance_Sheet_Table_Data[Index::6]:
 
             Info("self.BalanceSheet_Detail_Dict : {}".format(self.BalanceSheet_Detail_Dict))
             Info("Attribute_TD : {} , SHARE_CAPITAL_INDEX: {}".format(Attribute_TD, SHARE_CAPITAL_INDEX))
@@ -69,11 +69,13 @@ class Parse_Balance_Sheet:
             First_Set_Data = SHARE_CAPITAL_INDEX + 1
             Second_Set_Data = GROSS_BLOCK_INDEX + 1
             self.BalanceSheet_Detail_Dict[Year] = {}
-            self.Form_BalanceSheet_Detail_Dict(count=count, Year=Year, Balance_Sheet_Table_Data= Balance_Sheet_Table_Data,
+            self.Form_BalanceSheet_Detail_Dict(Index = SHARE_CAPITAL_INDEX, count=count, Year=Year, Balance_Sheet_Table_Data= Balance_Sheet_Table_Data,
                                                From_Td=First_Set_Data, To_Td=First_Set_Data, Skip_Td=len(Years_Of_Detail_avaliable))
+
+            Info("Running Second...")
+            self.Form_BalanceSheet_Detail_Dict(Index=GROSS_BLOCK_INDEX, count=count, Year=Year, Balance_Sheet_Table_Data=Balance_Sheet_Table_Data,
+                                               From_Td=Second_Set_Data, To_Td=Second_Set_Data + 5,Skip_Td=len(Years_Of_Detail_avaliable))
             count += 1
-            # self.Form_BalanceSheet_Detail_Dict(Year=Year, Balance_Sheet_Table_Data=Balance_Sheet_Table_Data,
-            #                                    From_Td=First_Set_Data, To_Td=First_Set_Data + 5,Skip_Td=len(Years_Of_Detail_avaliable))
             # for Attribute_TD in Balance_Sheet_Table_Data[SHARE_CAPITAL_INDEX:GROSS_BLOCK_INDEX-1:6]:
             #     Attribute = Attribute_TD.get_text()
             #     Formatted_Attribute_Name = self.Map_Attribute(Attribute)

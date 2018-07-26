@@ -18,6 +18,15 @@ class FindData:
         self.Db_Client = Connection().Connect
         Info("DB Clinet : {}".format(self.Db_Client))
 
+    @property
+    def Get_Balance_Sheet_Details(self):
+        cursor = self.Db_Client.Stock_Info.BalanceSheet
+
+        Result = cursor.find({"_id" : {'$in': ["HDFC", "SBIN"] }})
+        #print (list(Result))
+        return Result
+
+
     def Get_Stock_Codes(self):
         Info("Quering Stock Codes...")
         cursor = self.Db_Client.Stock_Info.Stock_List
@@ -40,9 +49,12 @@ class FindData:
 
         return Stock_And_ET_Id_Dict
 
+    def Get_ET_Id_Missing_Stock_Ids(self):
+        pass
+
 
 if __name__ == "__main__":
     Obj = FindData()
     # Obj.Get_Stock_Codes()
     # Obj.Get_Balance_Sheet_General_Url()
-    Obj.Get_Balance_Sheet_Url_For_Stock(Specific_Stock_Id="BHEL")
+    # Obj.Get_Balance_Sheet_Url_For_Stock(Specific_Stock_Id="BHEL")

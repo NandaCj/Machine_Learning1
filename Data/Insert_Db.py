@@ -51,19 +51,31 @@ class InsertData:
             Stock = Stock_ID["_id"]
             self.Insert_Stock_History(Stock=Stock)
 
-    def Insert_Stock_Balance_Sheet(self, Stock_Id):
+    def Insert_Stock_Balance_Sheet(self, Limit=5):
+        BalanceSheetDict = False
         Obj = Parse_Balance_Sheet()
         cursor = self.Db_Client.Stock_Info.Stock_List
-        for Stock_Id in cursor.find({}, {"_id": 1})[:5]:
+        for Stock_Id in cursor.find({}, {"_id": 1})[:Limit]:
             Stock_Id = Stock_Id["_id"]
             print ("StockId : {}".format(Stock_Id))
-            BalanceSheetDict = Obj.Parse_Balance_Sheet_Url(Stock_Id)
+            try:
+                BalanceSheetDict = Obj.Parse_Balance_Sheet_Url(Stock_Id)
+            except:
+                Critical("Error in initating the Parse Balance Sheet Url...")
             #print (BalanceSheetDict)
-            cursor = self.Db_Client.Stock_Info.BalanceSheet
-            cursor.insert(BalanceSheetDict)
+            if BalanceSheetDict:
+                try:
+                    cursor = self.Db_Client.Stock_Info.BalanceSheet
+                    cursor.insert(BalanceSheetDict)
+                except Exception as err:
+                    Critical(err)
+                    Critical("Error in Inserting the Data to DB ...")
+
+            else:
+                Critical("{} Balance Sheet Details are not added in DB".format(Stock_Id))
 
 if __name__ == "__main__":
     Obj = InsertData()
-    # Obj.Insert_Stock_Balance_Sheet("HDFC")
+    Obj.Insert_Stock_Balance_Sheet(Limit=2000)
     #Obj.Get_Stock_Names_List()
-    Obj.Insert_Stock_History_All()
+    # Obj.Insert_Stock_History_All()

@@ -130,13 +130,19 @@ class Parse_Balance_Sheet:
         return BalanceSheet_Detail_Dict
 
     def Parse_Balance_Sheet_Url(self, Stock_Id):
+        BalanceSheet_Detail_Dict = False
         FindData_Obj = FindData()
         General_Balance_Sheet_Url = FindData_Obj.Get_Balance_Sheet_General_Url()
         Stock_And_ET_Id_Dict = FindData_Obj.Get_Balance_Sheet_Url_For_Stock(Specific_Stock_Id=Stock_Id)
         for Stock_Id, ET_Id in Stock_And_ET_Id_Dict.items():
             Balance_Sheet_Url_For_Stock = re.sub('Code', ET_Id, General_Balance_Sheet_Url)
             print("Balance_Sheet_Url_For_Stock : {}". format(Balance_Sheet_Url_For_Stock))
-            BalanceSheet_Detail_Dict = self.Parse_Balance_Sheet_Details(Stock_Id, Balance_Sheet_Url_For_Stock)
+
+            try:
+                BalanceSheet_Detail_Dict = self.Parse_Balance_Sheet_Details(Stock_Id, Balance_Sheet_Url_For_Stock)
+            except:
+                Critical("Error in Parsing Stock_ID : {}".format(Stock_Id))
+                return False
         return BalanceSheet_Detail_Dict
 
 

@@ -24,14 +24,14 @@ class InsertData:
     def Insert_Stock_History(self, Stock = ''):
         Info("Inserting Trade History for : {}".format(Stock))
         cursor = self.Db_Client.Stock_Info.Price_History
-        Price_History = get_history(symbol=Stock, start=date(2018, 4, 1), end=date(2018, 4, 30))
+        Price_History = get_history(symbol=Stock, start=date(2013, 1, 1), end=date(2018, 1, 30))
 
         for index, value in zip(Price_History.index, Price_History.to_dict('records')):
             Date = datetime(year=index.year, month=index.month, day=index.day)
             try:
                 cursor.insert({"_id": Date})
             except:
-                pass
+                Critical("Error with Stock :{}".format(Stock))
             cursor.update({"_id":Date}, {'$set':{Stock:value}})
 
     def Insert_Stock_Names_List(self):
@@ -53,13 +53,17 @@ class InsertData:
 
     def Insert_Stock_Balance_Sheet(self, Stock_Id):
         Obj = Parse_Balance_Sheet()
-        BalanceSheetDict = Obj.Parse_Balance_Sheet_Url(Stock_Id)
-        print (BalanceSheetDict)
-        cursor = self.Db_Client.Stock_Info.BalanceSheet
-        cursor.insert(BalanceSheetDict)
+        cursor = self.Db_Client.Stock_Info.Stock_List
+        for Stock_Id in cursor.find({}, {"_id": 1})[:5]:
+            Stock_Id = Stock_Id["_id"]
+            print ("StockId : {}".format(Stock_Id))
+            BalanceSheetDict = Obj.Parse_Balance_Sheet_Url(Stock_Id)
+            #print (BalanceSheetDict)
+            cursor = self.Db_Client.Stock_Info.BalanceSheet
+            cursor.insert(BalanceSheetDict)
 
 if __name__ == "__main__":
     Obj = InsertData()
-    Obj.Insert_Stock_Balance_Sheet('HDFC')
+    # Obj.Insert_Stock_Balance_Sheet("HDFC")
     #Obj.Get_Stock_Names_List()
-    # Obj.Insert_Stock_History_All()
+    Obj.Insert_Stock_History_All()

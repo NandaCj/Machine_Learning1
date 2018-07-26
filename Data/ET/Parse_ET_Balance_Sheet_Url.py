@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import re, os
 from Data.From_Db import FindData
 from Helpers.Logging import *
-from Common_Data import BalanceSheet_Param_Dict
+from Common_Data import BalanceSheet_Param_Dict, BalanceSheet_March_Dict
 import configparser
 
 
@@ -27,9 +27,19 @@ class Parse_Balance_Sheet:
         Info("Years_Of_Detail_avaliable {}".format(Years_Of_Detail_avaliable))
         return Years_Of_Detail_avaliable
 
-    def Map_Attribute(self, Un_Formated_Attribute):
-        Mapped_Attribute_Name = BalanceSheet_Param_Dict[Un_Formated_Attribute]
+    def Map_Attribute(self, Un_Formated_Attribute, Dict):
+        Mapped_Attribute_Name = Dict[Un_Formated_Attribute]
         return Mapped_Attribute_Name
+
+    def Map_March(self, Year):
+        if '13' in Year:return "Mar_13"
+        if '14' in Year: return "Mar_14"
+        if '15' in Year: return "Mar_15"
+        if '16' in Year: return "Mar_16"
+        if '17' in Year:return "Mar_17"
+        if '18' in Year: return "Mar_18"
+        if '19' in Year:return "Mar_19"
+
 
     def Form_BalanceSheet_Detail_Dict(self, Index , count, Year, Balance_Sheet_Table_Data, From_Td, To_Td, Skip_Td):
         global SHARE_CAPITAL_INDEX
@@ -44,7 +54,7 @@ class Parse_Balance_Sheet:
                 #SHARE_CAPITAL_INDEX = GROSS_BLOCK_INDEX
                 Info("**************** Continue *****************")
                 break
-            Formatted_Attribute_Name = self.Map_Attribute(Attribute)
+            Formatted_Attribute_Name = self.Map_Attribute(Attribute, Dict=BalanceSheet_Param_Dict)
             Info("Formatted_Attribute_Name : {}".format(Formatted_Attribute_Name))
             Info("From_Td : {} , To_Td : {} , Count : {}".format(From_Td, To_Td, count))
             if Balance_Sheet_Table_Data[From_Td + count]:
@@ -68,12 +78,13 @@ class Parse_Balance_Sheet:
             Info("Year :{}".format(Year))
             First_Set_Data = SHARE_CAPITAL_INDEX + 1
             Second_Set_Data = GROSS_BLOCK_INDEX + 1
-            self.BalanceSheet_Detail_Dict[Year] = {}
-            self.Form_BalanceSheet_Detail_Dict(Index = SHARE_CAPITAL_INDEX, count=count, Year=Year, Balance_Sheet_Table_Data= Balance_Sheet_Table_Data,
+            Formated_Year = self.Map_March(Year)
+            self.BalanceSheet_Detail_Dict[Formated_Year] = {}
+            self.Form_BalanceSheet_Detail_Dict(Index = SHARE_CAPITAL_INDEX, count=count, Year=Formated_Year, Balance_Sheet_Table_Data= Balance_Sheet_Table_Data,
                                                From_Td=First_Set_Data, To_Td=First_Set_Data, Skip_Td=len(Years_Of_Detail_avaliable))
 
             Info("Running Second...")
-            self.Form_BalanceSheet_Detail_Dict(Index=GROSS_BLOCK_INDEX, count=count, Year=Year, Balance_Sheet_Table_Data=Balance_Sheet_Table_Data,
+            self.Form_BalanceSheet_Detail_Dict(Index=GROSS_BLOCK_INDEX, count=count, Year=Formated_Year, Balance_Sheet_Table_Data=Balance_Sheet_Table_Data,
                                                From_Td=Second_Set_Data, To_Td=Second_Set_Data + 5,Skip_Td=len(Years_Of_Detail_avaliable))
             count += 1
             # for Attribute_TD in Balance_Sheet_Table_Data[SHARE_CAPITAL_INDEX:GROSS_BLOCK_INDEX-1:6]:
@@ -100,8 +111,8 @@ class Parse_Balance_Sheet:
             #
             #     Second_Set_Data += 6
 
-        for key, value in self.BalanceSheet_Detail_Dict.items():
-            print(key ,"********", value)
+        # for key, value in self.BalanceSheet_Detail_Dict.items():
+        #     print(key ,"********", value)
 
         return self.BalanceSheet_Detail_Dict
 
@@ -124,7 +135,7 @@ class Parse_Balance_Sheet:
         Stock_And_ET_Id_Dict = FindData_Obj.Get_Balance_Sheet_Url_For_Stock(Specific_Stock_Id=Stock_Id)
         for Stock_Id, ET_Id in Stock_And_ET_Id_Dict.items():
             Balance_Sheet_Url_For_Stock = re.sub('Code', ET_Id, General_Balance_Sheet_Url)
-            Info("Balance_Sheet_Url_For_Stock : {}". format(Balance_Sheet_Url_For_Stock))
+            print("Balance_Sheet_Url_For_Stock : {}". format(Balance_Sheet_Url_For_Stock))
             BalanceSheet_Detail_Dict = self.Parse_Balance_Sheet_Details(Stock_Id, Balance_Sheet_Url_For_Stock)
         return BalanceSheet_Detail_Dict
 

@@ -21,4 +21,13 @@ BalanceSheet_Param_Dict = {
             "NET CURRENT ASSETS": "Net_Current_Assessts",
             "Misc. Expenses": "Misc_Expenses",
             "TOTAL ASSETS(A+B+C+D+E)":"Total_Assests",
-              }
+            }
+
+BalanceSheet_March_Dict = {
+            "Mar'13":"Mar_13",
+            "Mar'14":"Mar_14",
+            "Mar'15":"Mar_15",
+            "Mar'16":"Mar_16",
+            "Mar'17":"Mar_17",
+            "Mar'18":"Mar_18",
+            }

@@ -19,32 +19,31 @@ class Linear_Regression:
         df_Columns = []
         BalanceSheet_df = None
         for Each_Stock_BalanceSheet_Data in Complete_Balace_Sheet_Data:
-            # try:
+            try:
                 Stock = str(Each_Stock_BalanceSheet_Data["_id"])  # HDFC
                 Info("Stock : {}".format(Stock))
                 BalanceSheet_Dict[Stock] = {}
                 for Each_March in ["Mar_17", "Mar_18"]:
                     for Each_Attr in ["Reserves_Surplus", "Net_Worth"]:
-                            BalanceSheet_Attr_Value = Each_Stock_BalanceSheet_Data[Each_March][Each_Attr]
-                            Info("BalanceSheet_Attr_Value : {}".format(BalanceSheet_Attr_Value))
-                            BalanceSheet_Attr = Each_March + "_" + Each_Attr # Mar_18_Net_Worth
-                            Info("BalanceSheet_Attr : {}".format(BalanceSheet_Attr))
-                            # BalanceSheet_Dict["_id"] = {Stock : {}}
+                        BalanceSheet_Attr_Value = Each_Stock_BalanceSheet_Data[Each_March][Each_Attr]
+                        Info("BalanceSheet_Attr_Value : {}".format(BalanceSheet_Attr_Value))
+                        BalanceSheet_Attr = Each_March + "_" + Each_Attr # Mar_18_Net_Worth
+                        Info("BalanceSheet_Attr : {}".format(BalanceSheet_Attr))
+                        # BalanceSheet_Dict["_id"] = {Stock : {}}
 
-                            BalanceSheet_Dict[Stock][BalanceSheet_Attr] = BalanceSheet_Attr_Value
-                            Info("BalanceSheet_Dict : {}".format(BalanceSheet_Dict))
-                            # BalanceSheet_Dict[Stock]
-                            df_Columns.append(BalanceSheet_Attr)
+                        BalanceSheet_Dict[Stock][BalanceSheet_Attr] = BalanceSheet_Attr_Value
+                        Info("BalanceSheet_Dict : {}".format(BalanceSheet_Dict))
+                        # BalanceSheet_Dict[Stock]
+                        df_Columns.append(BalanceSheet_Attr)
 
-
-            # except Exception as err:
-            #     Critical(err)
-            #     UnUsual_Stock.append(Stock)
-            #     Critical("Error in Adding {} BalanceSheet Details to Dataframe ...".format(Stock))
+            except Exception as err:
+                Critical(err)
+                UnUsual_Stock.append(Stock)
+                Critical("Error in Adding {} BalanceSheet Details to Dataframe ...".format(Stock))
         BalanceSheet_df = pd.DataFrame.from_dict(BalanceSheet_Dict, orient="index")
         Info (BalanceSheet_Dict)
-        # Critical("Total {} Stocks Are UnUsual in having BalaceSheet Details ".format(len(UnUsual_Stock)))
-        # Critical("List : {}".format("".join(UnUsual_Stock)))
+        Critical("Total {} Stocks Are UnUsual in having BalaceSheet Details ".format(len(UnUsual_Stock)))
+        Critical("List : {}".format("".join(UnUsual_Stock)))
         return BalanceSheet_df
 
 

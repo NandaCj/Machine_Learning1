@@ -21,8 +21,8 @@ class FindData:
     @property
     def Get_Balance_Sheet_Details(self):
         cursor = self.Db_Client.Stock_Info.BalanceSheet
-
-        Result = cursor.find({"_id" : {'$in': ["HDFC", "SBIN"] }})
+        Result = cursor.find({})
+        #Result = cursor.find({"_id" : {'$in': ["HDFC", "SBIN"] }})
         #print (list(Result))
         return Result
 

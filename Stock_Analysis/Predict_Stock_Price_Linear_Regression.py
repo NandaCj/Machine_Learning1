@@ -5,6 +5,7 @@ from Helpers.Logging import *
 from Helpers.Helpers import Helpers
 from Data.From_Db import FindData
 import matplotlib.pyplot as plt
+from Pandas_Practice.Pandas_Helpers import Df_view
 Filler = "****************************************************************"
 class Linear_Regression:
 
@@ -23,7 +24,7 @@ class Linear_Regression:
                 Stock = str(Each_Stock_BalanceSheet_Data["_id"])  # HDFC
                 Info("Stock : {}".format(Stock))
                 BalanceSheet_Dict[Stock] = {}
-                for Each_March in ["Mar_17", "Mar_18"]:
+                for Each_March in ["Mar_17", "Mar_16"]:
                     for Each_Attr in ["Reserves_Surplus", "Net_Worth"]:
                         BalanceSheet_Attr_Value = Each_Stock_BalanceSheet_Data[Each_March][Each_Attr]
                         Info("BalanceSheet_Attr_Value : {}".format(BalanceSheet_Attr_Value))
@@ -43,38 +44,43 @@ class Linear_Regression:
         BalanceSheet_df = pd.DataFrame.from_dict(BalanceSheet_Dict, orient="index")
         Info (BalanceSheet_Dict)
         Critical("Total {} Stocks Are UnUsual in having BalaceSheet Details ".format(len(UnUsual_Stock)))
-        Critical("List : {}".format("".join(UnUsual_Stock)))
+        # Critical("List : {}".format(",".join(UnUsual_Stock)))
+        Critical(UnUsual_Stock)
         return BalanceSheet_df
 
 
     def Get_BalanceSheet_Data_For_Linear_Regression(self):
-        FinalDict = {}; Stock = None
-        BalanceSheet_Details_From_DB = list(FindData().Get_Balance_Sheet_Details)
-        Info("BalanceSheet_Details_From_DB : \n {}".format(BalanceSheet_Details_From_DB))
-        BalanceSheet_df = self.Add_BalanceSheet_Data_To_Dataframe(BalanceSheet_Details_From_DB)
 
+        # BalanceSheet_Details_From_DB = list(FindData().Get_Balance_Sheet_Details)
+        # Info("BalanceSheet_Details_From_DB : \n {}".format(BalanceSheet_Details_From_DB))
+        # BalanceSheet_df = self.Add_BalanceSheet_Data_To_Dataframe(BalanceSheet_Details_From_DB)
+        # Helpers().Pickle_Dump(BalanceSheet_df)
+        BalanceSheet_df = Helpers().Pickle_Load()
 
-        # Helpers().Print_Type_And_Value(FirstElement)
-
-        # for FullDict in BalanceSheet_Details_From_DB:
-        #     try:
-        #         Stock = str(FullDict["_id"])
-        #         Mar_17_Share_Capital = FullDict["Mar_17"]["Share_Capital"]
-        #         #FinalDict["_id"] = Stock
-        #         FinalDict[Stock] = Mar_17_Share_Capital
-        #
-        #     except KeyError:
-        #         Critical("{} has no March_17 Share Capital Value ".format(Stock))
-        #         continue
-        # Info(Filler)
-        # Info(FinalDict)
-        # BalanceSheet_df = pd.DataFrame.from_dict(FinalDict, orient="index", columns=["Mar_17_Share_Capital"])
-
-        print (BalanceSheet_df)
+        # Df_view(BalanceSheet_df, Show_Full_Info=True)
+        # print (BalanceSheet_df)
         # BalanceSheet_df.hist()
         # plt.show()
+        return BalanceSheet_df
+
+    def Test(self):
+        df = self.Get_BalanceSheet_Data_For_Linear_Regression()
+        df['Net_Worth_Increase_Percentage'] = ((df['Mar_17_Net_Worth'] - df['Mar_16_Net_Worth']) / df['Mar_17_Net_Worth']) * 100
+        print (df[['Net_Worth_Increase_Percentage']])
+        Df_view(df, Show_Full_Info=True)
+        print(df.loc[df['Net_Worth_Increase_Percentage']>10000, ['Net_Worth_Increase_Percentage']])
+        # print(Filler)
+        # print(df.iloc[0])
+        # print(Filler)
+        # print(df.loc['ZUARI'])
+        df.loc[df['Net_Worth_Increase_Percentage']>100].hist()
+        plt.show()
 
 
 if __name__ == "__main__":
     Obj = Linear_Regression()
-    Obj.Get_BalanceSheet_Data_For_Linear_Regression()
+    # Obj.Get_BalanceSheet_Data_For_Linear_Regression()
+    Obj.Test()
+
+
+

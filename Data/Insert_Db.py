@@ -10,6 +10,13 @@ Test_Columns = ['Symbol', 'Series', 'Prev Close', 'Open', 'High', 'Low', 'Last',
                         'Turnover', 'Trades', 'Deliverable Volume', '%Deliverble']
 
 nse = Nse()
+Errored_Stock_List = ['ITDCEM', 'NESTLEIND', 'TAKE', 'SANOFI', 'SHARONBIO', 'AEGISCHEM', 'ACCELYA',
+                      'CRISIL', 'VBL', 'SCHAEFFLER', 'VIDEOIND', 'MERCK', 'PALASHSECU', 'DICIND',
+                      'RSYSTEMS', 'ALBERTDAVD', 'AMBUJACEM', 'PAPERPROD', 'MAXVIL', 'GROBTEA', 'TIFIN',
+                      'XCHANGING', 'SMSLIFE', 'DCAL', 'GILLETTE', 'LINDEINDIA', 'VARDHACRLC', 'DIGJAMLTD',
+                      'RAIN', 'KSBPUMPS', 'HEXAWARE', 'BIGBLOC', 'WSI', 'FOSECOIND', 'ACC', 'SINTEX', 'ABB',
+                      'PGHH', 'MAHINDCIE', 'AVADHSUGAR', 'MAGADSUGAR', 'GANGESSECU', 'SIEMENS', 'VESUVIUS',
+                      'CASTROLIND']
 
 class InsertData:
     """
@@ -55,7 +62,7 @@ class InsertData:
         BalanceSheetDict = False
         Obj = Parse_Balance_Sheet()
         cursor = self.Db_Client.Stock_Info.Stock_List
-        for Stock_Id in cursor.find({}, {"_id": 1})[:Limit]:
+        for Stock_Id in cursor.find({"_id":{'$in':Errored_Stock_List}}, {"_id": 1})[:Limit]:
             Stock_Id = Stock_Id["_id"]
             print ("StockId : {}".format(Stock_Id))
             try:

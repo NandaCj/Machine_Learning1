@@ -1,0 +1,22 @@
+Problem Statement:
+
+1. What Parameters in the Balance Sheet influence largely on the Change in Stock Price?
+    Use Pearson's R to find the Influencing Parameter
+    should i use last 4 years change in balancesheet values to find the Influencing param
+        or
+        should i use all the stock last 4 years change in balancesheet to find the influencing parameter
+
+2. How to Predict the change in Stock Price by using the History Balance Sheet Data
+
+
+Percent Change in Each Param:
+    Say
+        Percent_Change_in_Netwoth = Mar_17_NetWorth - Mar_16_NetWorth / Mar_16_NetWorth * 100
+        Percent_Change_in_Stock_Price = Mar_17_Stock_Price - Mar_16_Stock_Price /Mar_17_Stock_Price * 100
+
+    How does / What is Pearson R for
+        Percent_Change_in_Netwoth --> Percent_Change_in_Stock_Price
+
+
+
+

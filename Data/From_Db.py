@@ -22,7 +22,7 @@ class FindData:
     def Get_Balance_Sheet_Details(self):
         cursor = self.Db_Client.Stock_Info.BalanceSheet
         Result = cursor.find({})
-        #Result = cursor.find({"_id" : {'$in': ["HDFC", "SBIN"] }})
+        # Result = cursor.find({"_id" : {'$in': ["HDFC", "SBIN"] }})
         #print (list(Result))
         return Result
 
@@ -36,6 +36,7 @@ class FindData:
 
     def Get_Balance_Sheet_General_Url(self):
         Urls = list(self.Db_Client.ET.ETUrls.find({}, {"_id": 0, "BalanceSheet": 1}))
+        Info(Urls)
         General_Balance_Sheet_Url = Urls[0]['BalanceSheet']
         # Info("BalanceSheetUrl : {}".format(General_Balance_Sheet_Url))
 
@@ -52,9 +53,32 @@ class FindData:
     def Get_ET_Id_Missing_Stock_Ids(self):
         pass
 
+    def Get_Missing_Balance_Sheet_Stock_Ids(self):
+
+        ALL = []
+        B_IDS = []
+        All_Stock_Ids = list(self.Db_Client.Stock_Info.Stock_List.find({},{"_id":1}))
+        Balance_Sheet_Ids = list(self.Db_Client.Stock_Info.BalanceSheet.find({},{"_id":1}))
+        for id in All_Stock_Ids:
+            ALL.append(str(id["_id"]))
+        for id in Balance_Sheet_Ids:
+            B_IDS.append(str(id["_id"]))
+
+
+        # print (ALL)
+        # print(B_IDS)
+
+        print(len(All_Stock_Ids), len(Balance_Sheet_Ids))
+        Diff = list(set(ALL) - set(B_IDS))
+        print (Diff)
+        print ("Diff:", len(Diff) )
+
+
+
 
 if __name__ == "__main__":
     Obj = FindData()
     # Obj.Get_Stock_Codes()
     # Obj.Get_Balance_Sheet_General_Url()
     # Obj.Get_Balance_Sheet_Url_For_Stock(Specific_Stock_Id="BHEL")
+    Obj.Get_Missing_Balance_Sheet_Stock_Ids()

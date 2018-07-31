@@ -18,13 +18,28 @@ class Parse_Balance_Sheet:
     def __init__(self):
         pass
 
+    def Get_Q_Months(self, Balance_Sheet_Page_Soup):
+        Years_Available_Regex = r'[Mar|Jul|Dec|Jan].{5}'
+        print (Balance_Sheet_Page_Soup.find_all('tr')[2].get_text())
+        Balance_Sheet_Table_Data = Balance_Sheet_Page_Soup.find_all('tr')[2].get_text()
+        Balance_Sheet_Table_Data = re.sub('Particulars', '', Balance_Sheet_Table_Data)
+        Years_Of_Detail_avaliable = re.findall(Years_Available_Regex, str(Balance_Sheet_Table_Data))
+        return Years_Of_Detail_avaliable
+        # QMonths = re.findall(r'Months', Balance_Sheet_Page_Soup.find_all('tr')[4].get_text())
+
+
     def Get_Total_Available_Years_BalaceSheet(self, Balance_Sheet_Page_Soup):
+        Info("Getting Total Available Years in Balancesheet..")
+        Years_Available_Regex = r'[Mar|Jul|Dec|Jan].{5}'
+        self.Get_Q_Months(Balance_Sheet_Page_Soup)
         Balance_Sheet_Years = re.findall(r'Months', Balance_Sheet_Page_Soup.find_all('tr')[3].get_text())
         Years_Of_Detail_avaliable = len(Balance_Sheet_Years)
         Info("Balance Sheet Data if Available for {} years ".format(Years_Of_Detail_avaliable))
-        Balance_Sheet_Table_Data = Balance_Sheet_Page_Soup.find_all('tr')[2]
-        Years_Of_Detail_avaliable = re.findall(r'Mar...', str(Balance_Sheet_Table_Data))
-        Info("Years_Of_Detail_avaliable {}".format(Years_Of_Detail_avaliable))
+        Balance_Sheet_Table_Data = Balance_Sheet_Page_Soup.find_all('tr')[2].get_text()
+        Critical("***********{}".format(Balance_Sheet_Table_Data))
+        Balance_Sheet_Table_Data = re.sub('Particulars', '', Balance_Sheet_Table_Data)
+        Years_Of_Detail_avaliable = re.findall(Years_Available_Regex, str(Balance_Sheet_Table_Data))
+        Critical("Years_Of_Detail_avaliable {}".format(Years_Of_Detail_avaliable))
         return Years_Of_Detail_avaliable
 
     def Map_Attribute(self, Un_Formated_Attribute, Dict):
@@ -32,13 +47,24 @@ class Parse_Balance_Sheet:
         return Mapped_Attribute_Name
 
     def Map_March(self, Year):
-        if '13' in Year:return "Mar_13"
-        if '14' in Year: return "Mar_14"
-        if '15' in Year: return "Mar_15"
-        if '16' in Year: return "Mar_16"
-        if '17' in Year:return "Mar_17"
-        if '18' in Year: return "Mar_18"
-        if '19' in Year:return "Mar_19"
+        Y = None
+        Critical("Year : {}".format(Year))
+        if 'Mar' in Year: 
+            Y = 'Mar'
+        if 'Dec' in Year:
+            Y = 'Dec'
+        if 'Jul' in Year:
+            Y = 'Jul'
+        if 'Jan' in Year:
+            Y = 'Jan'
+        
+        if '13' in Year:return Y + "_13"
+        if '14' in Year: return Y + "_14"
+        if '15' in Year: return Y + "_15"
+        if '16' in Year: return Y + "_16"
+        if '17' in Year:return Y + "_17"
+        if '18' in Year: return Y + "_18"
+        if '19' in Year:return Y + "_19"
 
 
     def Form_BalanceSheet_Detail_Dict(self, Index , count, Year, Balance_Sheet_Table_Data, From_Td, To_Td, Skip_Td):
@@ -75,7 +101,7 @@ class Parse_Balance_Sheet:
         self.BalanceSheet_Detail_Dict = {"_id":Stock_Id}
         count = 0
         for Year in Years_Of_Detail_avaliable:
-            Info("Year :{}".format(Year))
+            Critical("Year :{}".format(Year))
             First_Set_Data = SHARE_CAPITAL_INDEX + 1
             Second_Set_Data = GROSS_BLOCK_INDEX + 1
             Formated_Year = self.Map_March(Year)
@@ -119,6 +145,7 @@ class Parse_Balance_Sheet:
 
 
     def Parse_Balance_Sheet_Details(self, Stock_Id, Balance_Sheet_Url_For_Stock):
+        Info("Pasring the Url : {}".format(Balance_Sheet_Url_For_Stock))
         Balance_Sheet_Page = requests.get(Balance_Sheet_Url_For_Stock).text
         Balance_Sheet_Page_Soup = BeautifulSoup(Balance_Sheet_Page, 'html.parser')
         Years_Of_Detail_avaliable = self.Get_Total_Available_Years_BalaceSheet(Balance_Sheet_Page_Soup)
@@ -139,8 +166,10 @@ class Parse_Balance_Sheet:
             print("Balance_Sheet_Url_For_Stock : {}". format(Balance_Sheet_Url_For_Stock))
 
             try:
+                #Parsing BalaceSheet Url Begins here...
                 BalanceSheet_Detail_Dict = self.Parse_Balance_Sheet_Details(Stock_Id, Balance_Sheet_Url_For_Stock)
-            except:
+            except Exception as err:
+                Critical("Err msg : {}".format(err))
                 Critical("Error in Parsing Stock_ID : {}".format(Stock_Id))
                 return False
         return BalanceSheet_Detail_Dict
@@ -148,4 +177,4 @@ class Parse_Balance_Sheet:
 
 if __name__ == "__main__":
     Obj = Parse_Balance_Sheet()
-    Obj.Parse_Balance_Sheet_Url(Stock_Id = 'HDFC')
+    Obj.Parse_Balance_Sheet_Url(Stock_Id = 'CRISIL')

@@ -37,15 +37,20 @@ class InsertData:
             Date = datetime(year=index.year, month=index.month, day=index.day)
             try:
                 cursor.insert({"_id": Date})
-            except:
-                Critical("Error with Stock :{}".format(Stock))
+            except Exception as err:
+                #Critical("Error with Stock :{} \n {}".format(Stock, err))
+                pass
             cursor.update({"_id":Date}, {'$set':{Stock:value}})
 
     def Insert_Stock_Names_List(self):
         cursor = self.Db_Client.Stock_Info.Stock_List
         all_stock_codes = nse.get_stock_codes()
         for StockCode, CompanyName in all_stock_codes.items():
-            cursor.insert({"_id":StockCode , 'Stock_Code':CompanyName})
+            try :
+                cursor.insert({"_id":StockCode , 'Stock_Code':CompanyName})
+            except Exception as err:
+                Critical("Error in inserting Stock {}".format(StockCode))
+                continue
 
     def Get_Stock_Codes(self):
         pass
@@ -53,8 +58,10 @@ class InsertData:
     def Insert_Stock_History_All(self):
         Info("Inserting Stock Trade History...")
         cursor = self.Db_Client.Stock_Info.Stock_List
-        stock_list = cursor.find({}, {"_id": 1})
-        for Stock_ID in stock_list[:5]:
+        stock_list = list(cursor.find({}, {"_id": 1}))
+        Info("stock_list : {}".format(stock_list))
+        for Stock_ID in stock_list[290:]:
+            print("{} is in Progress...".format(Stock_ID))
             Stock = Stock_ID["_id"]
             self.Insert_Stock_History(Stock=Stock)
 
@@ -62,13 +69,15 @@ class InsertData:
         BalanceSheetDict = False
         Obj = Parse_Balance_Sheet()
         cursor = self.Db_Client.Stock_Info.Stock_List
-        for Stock_Id in cursor.find({"_id":{'$in':Errored_Stock_List}}, {"_id": 1})[:Limit]:
+        #"_id":{'$in':Errored_Stock_List}
+        for Stock_Id in cursor.find({}, {"_id": 1})[:Limit]:
             Stock_Id = Stock_Id["_id"]
             print ("StockId : {}".format(Stock_Id))
             try:
+                # Parsing of Url Starts here..
                 BalanceSheetDict = Obj.Parse_Balance_Sheet_Url(Stock_Id)
-            except:
-                Critical("Error in initating the Parse Balance Sheet Url...")
+            except Exception as err:
+                Critical("Error in initating the Parse Balance Sheet Url... {}".format(err))
             #print (BalanceSheetDict)
             if BalanceSheetDict:
                 try:
@@ -83,6 +92,6 @@ class InsertData:
 
 if __name__ == "__main__":
     Obj = InsertData()
-    Obj.Insert_Stock_Balance_Sheet(Limit=2000)
-    #Obj.Get_Stock_Names_List()
-    # Obj.Insert_Stock_History_All()
+    # Obj.Insert_Stock_Balance_Sheet(Limit=2000)
+    # Obj.Insert_Stock_Names_List()
+    Obj.Insert_Stock_History_All()

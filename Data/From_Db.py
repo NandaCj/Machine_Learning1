@@ -5,6 +5,7 @@ from datetime import date
 from datetime import datetime
 from Helpers.Logging import *
 import re
+from datetime import datetime
 
 
 Test_Columns = ['Symbol', 'Series', 'Prev Close', 'Open', 'High', 'Low', 'Last', 'Close', 'VWAP', 'Volume',
@@ -26,6 +27,10 @@ class FindData:
         #print (list(Result))
         return Result
 
+    @property
+    def Get_Stock_Split_Url(self):
+        cursor = self.Db_Client.ET.ETUrls
+        return list(cursor.find({}, {"_id":0, 'StockSplit':1}))[0]['StockSplit']
 
     def Get_Stock_Codes(self):
         Info("Quering Stock Codes...")
@@ -74,11 +79,21 @@ class FindData:
         print ("Diff:", len(Diff) )
 
 
+    def Get_Stock_History(self, Stock=None, Start_Date=None, End_Date=None, On_Date=None):
+        cursor = self.Db_Client.Stock_Info.Price_History
+        if On_Date:
 
+            History = cursor.find({"_id":On_Date}, {Stock+".Close":1, "_id":0})
+        # print(list(History))
+        return list(History)
 
 if __name__ == "__main__":
     Obj = FindData()
     # Obj.Get_Stock_Codes()
     # Obj.Get_Balance_Sheet_General_Url()
     # Obj.Get_Balance_Sheet_Url_For_Stock(Specific_Stock_Id="BHEL")
-    Obj.Get_Missing_Balance_Sheet_Stock_Ids()
+    # Obj.Get_Missing_Balance_Sheet_Stock_Ids()
+
+    print(Obj.Get_Stock_History(Stock='3IINFOTECH', On_Date=datetime(2014, 01, 31)))
+    # Obj.Get_Stock_History(On_Date='ISODate("2013-03-01T00:00:00.000+0000")')
+    # print(Obj.Get_Stock_Split_Url)

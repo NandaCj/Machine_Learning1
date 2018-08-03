@@ -16,168 +16,161 @@ class Linear_Regression:
     def __init__(self):
         pass
 
-    def Add_BalanceSheet_Data_To_Dataframe(self, Complete_Balace_Sheet_Data):
+    def Make_BalanceSheet_Dataframe(self, BalanceSheet_Detail_For_All_Stock):
         Info(Filler)
-        UnUsual_Stock = []
+        Different_Format_Stocks = []
         Stock = ""
         BalanceSheet_Dict = {}
         df_Columns = []
         BalanceSheet_df = None
-        for Each_Stock_BalanceSheet_Data in Complete_Balace_Sheet_Data:
+        for Each_Stock_BalanceSheet_Data in BalanceSheet_Detail_For_All_Stock:
+            #[ {"_id":"HDFC"},
+            # {'Mar_17' : {'Net_Worth':100, 'Capital': 40, etc ...},
+            # {'Mar_18' : {'Net_Worth':140, 'Capital': 50, etc ...},]
             try:
                 Stock = str(Each_Stock_BalanceSheet_Data["_id"])  # HDFC
-                Info("Stock : {}".format(Stock))
-                BalanceSheet_Dict[Stock] = {}
-                # Critical(type(Each_Stock_BalanceSheet_Data))
-                # Critical(Each_Stock_BalanceSheet_Data)
-                for Each_March in Each_Stock_BalanceSheet_Data.keys():
-                    #Critical("Each_March :{}".format(Each_March))
-                    if Each_March == "_id":
+                BalanceSheet_Dict[Stock] = {} # {'HDFC' : {}}
+                for Each_Quarter in Each_Stock_BalanceSheet_Data.keys(): # ['Mar_17', 'Mar_18']
+                    if Each_Quarter == "_id": #{"_id":"HDFC"}
                         continue
-                    for Each_Attr in Each_Stock_BalanceSheet_Data[Each_March].keys():
-                        BalanceSheet_Attr_Value = Each_Stock_BalanceSheet_Data[Each_March][Each_Attr]
-                        Info("BalanceSheet_Attr_Value : {}".format(BalanceSheet_Attr_Value))
-                        BalanceSheet_Attr = Each_March + "_" + Each_Attr # Mar_18_Net_Worth
-                        Info("BalanceSheet_Attr : {}".format(BalanceSheet_Attr))
-                        # BalanceSheet_Dict["_id"] = {Stock : {}}
-
-                        BalanceSheet_Dict[Stock][BalanceSheet_Attr] = BalanceSheet_Attr_Value
-                        Info("BalanceSheet_Dict : {}".format(BalanceSheet_Dict))
-                        # BalanceSheet_Dict[Stock]
+                    for Each_Attr in Each_Stock_BalanceSheet_Data[Each_Quarter].keys():#['Net_Worth', 'Capital'] for Mar_17
+                        BalanceSheet_Attr_Value = Each_Stock_BalanceSheet_Data[Each_Quarter][Each_Attr] # 100
+                        BalanceSheet_Attr = Each_Quarter + "_" + Each_Attr # Mar_17_Net_Worth
+                        BalanceSheet_Dict[Stock][BalanceSheet_Attr] = BalanceSheet_Attr_Value # {'HDFC':{'Mar_17_Net_Worth':100}}
                         df_Columns.append(BalanceSheet_Attr)
-
+                Info("Generated Balance Sheet Dataframe for {}".format(Stock))
             except Exception as err:
                 Critical(err)
-                UnUsual_Stock.append(Stock)
-                Critical("Error in Adding {} BalanceSheet Details to Dataframe ...".format(Stock))
+                Different_Format_Stocks.append(Stock)
         BalanceSheet_df = pd.DataFrame.from_dict(BalanceSheet_Dict, orient="index")
-        Info (BalanceSheet_Dict)
-        Critical("Total {} Stocks Are UnUsual in having BalaceSheet Details ".format(len(UnUsual_Stock)))
-        # Critical("List : {}".format(",".join(UnUsual_Stock)))
-        Critical(UnUsual_Stock)
+        BalanceSheet_df = BalanceSheet_df.sort_index(axis=1, ascending=False) # to Sort the Columns increasing on Yearly 
+        Critical("Total {} Stocks have Different Format of BalaceSheet Details in Economic Times".format(len(Different_Format_Stocks)))
+        Critical(Different_Format_Stocks)
+
         return BalanceSheet_df
 
 
-    def Get_BalanceSheet_Data_For_Linear_Regression(self, from_csv = False):
+    def Get_BalanceSheet_Data_For_Linear_Regression(self, from_csv = False, csv='None'):
         if from_csv :
+            Info("Genearting BalanceSheet Dataframe from CSV {}".format(CSV_PATH_ORG))
             BalanceSheet_df = pd.DataFrame.from_csv(path=CSV_PATH_ORG)
             return BalanceSheet_df
         BalanceSheet_Details_From_DB = list(FindData().Get_Balance_Sheet_Details)
-        Info("BalanceSheet_Details_From_DB : \n {}".format(BalanceSheet_Details_From_DB))
-        BalanceSheet_df = self.Add_BalanceSheet_Data_To_Dataframe(BalanceSheet_Details_From_DB)
-        # Helpers().Pickle_Dump(BalanceSheet_df)
-        # BalanceSheet_df = Helpers().Pickle_Load()
-
-        # Df_view(BalanceSheet_df, Show_Full_Info=True)
-        # print (BalanceSheet_df)
-        # BalanceSheet_df.hist()
-        # plt.show()
+        BalanceSheet_df = self.Make_BalanceSheet_Dataframe(BalanceSheet_Details_From_DB)
 
         return BalanceSheet_df
 
 
 
-    def Yearly_BalanceSheet_Param_Change_Percent(self, DF=None):
+    def Yearly_BalanceSheet_Param_Change_Percent(self, BalanceSheet_Df=None):
 
-        Final_DF = pd.DataFrame()
-        for index in DF.index[:50]:
-            New_DF = pd.DataFrame()
-            Info("Finding Yearly_BalanceSheet_Param_Change_Percent for Stock :{} ".format(index))
-            # df = df.iloc[num].dropna(axis='columns')
+        """
+            BalanceSheet_Df:
+                    Mar_16_Net_Worth    Mar_16_Capital  Mar_17_Net_Worth    Mar_17_Capital  Dec_17_Net_Worth
+            HDFC        100                 40              140                 50              NaN
+            SBIN        200                 50              300                 60              NaN
+
+        Note : The BalanceSheet_Df has some Quarters Columns which are have no Data for that Quarter those needs to reomved...
+        """
+
+        BalanceSheet_Param_PChg_Df = pd.DataFrame() # For Storing all Stocks BalaceSheet DFs in Singe DFs
+        for index in BalanceSheet_Df.index:
+            New_DF = pd.DataFrame() # Create New BalaceSheet Df for each Stock
+            All_Quarter_And_Values = [] # ['Mar_16_Net_Worth', 'Mar_17_Net_Worth', etc...]
             try:
-                df = DF.loc[[index]].dropna(axis='columns')
+                tmp_df = BalanceSheet_Df.loc[[index]].dropna(axis='columns') # drop complete Quarter Columns in BalanceSheet_Df is it has even 1 missing value
             except Exception as err:
                 Critical(err)
                 Critical("{} has issue in this Dataframe".format(index))
                 continue
-            Col = []
-
-            for column in df.columns:
-                Col.append(column)
-            Sorted_List = sorted(set([q[:6] for q in sorted(Col)]))
-
-            Col_Diff = []
-            for i in range(len(Sorted_List) - 1):
-                Mon = Sorted_List[i][:3]  # Mar_
-                L_Year = Sorted_List[i][4:6]  # 15
-                h = Sorted_List[i + 1]
-                H_Year = h[4:6]
+            for column in tmp_df.columns:
+                All_Quarter_And_Values.append(column)
+            Sorted_Quarters = sorted(set([q[:6] for q in sorted(All_Quarter_And_Values)])) # ['Mar_16', Mar_17, ...]
+            for i in range(len(Sorted_Quarters) - 1):
+                Quarter = Sorted_Quarters[i][:3]  # Mar_
+                L_Year = Sorted_Quarters[i][4:6]  # 16
+                H_Year = Sorted_Quarters[i + 1][4:6] # 17
                 for attr in BalanceSheet_Param_Dict.values():
-                    New_attr = Mon + "_" + L_Year + "_" + H_Year + "_" + attr + "_PChg"
-                    L_Column = Mon + "_" + L_Year + "_" + attr
-                    H_Column = Mon + "_" + H_Year + "_" + attr
-                    # print(L_Column , H_Column)
-                    Col_Diff.append(New_attr)
-                    # New_DF.append(df)
-                    New_DF[New_attr] = ((df[H_Column] - df[L_Column]) / df[L_Column]) * 100
-                    # print("New_DF...\n",New_DF)
-            Final_DF = Final_DF.append(New_DF)
-            # print("Final_DF \n", Final_DF)
+                    New_attr = Quarter + "_" + L_Year + "_" + H_Year + "_" + attr + "_PChg" # Mar_16_17_Net_Worth_Pchg
+                    L_Column = Quarter + "_" + L_Year + "_" + attr # Mar_16_Net_Worth
+                    H_Column = Quarter + "_" + H_Year + "_" + attr # Mar_17_Net_Worth
+                    try:
+                        New_DF[New_attr] = ((tmp_df[H_Column] - tmp_df[L_Column]) / tmp_df[L_Column]) * 100
+                    except KeyError:
+                        Critical("{} does not have this key...".format(index))
+                        continue
+            Info("calculated for {}".format(index))
+            BalanceSheet_Param_PChg_Df = BalanceSheet_Param_PChg_Df.append(New_DF) # This is done bcoz we need a New_DF created for Each Stock
 
-            # Final_DF.append(New_DF)
-            # print(New_DF['Mar_13_14_Secured_Loan_PChg'])
-            # print(Final_DF)
-            # for col in New_DF.columns:
-            #     print (col, "*******", New_DF[col])
-            #
-            # for index in New_DF.index:
-            #     print ("Indexes : {}".format(index))
-        return Final_DF
+        return BalanceSheet_Param_PChg_Df
 
-    def Yearly_Stock_Price_Change_Percent(self, DF):
-        for index in DF.index[:50]:
+    def Yearly_Stock_Price_Change_Percent(self, BalanceSheet_Param_PChg_Df):
+
+        find_data = FindData()
+        """
+                    BalanceSheet_Param_PChg_Df:
+                            Mar_16_17_Net_Worth_PChg    Mar_16_17_Capital_PChg
+                    HDFC        45                              25
+                    SBIN        26                              10
+
+                Note : The BalanceSheet_Param_PChg_Df has some Quarters Columns which are have no Data for that Quarter those needs to reomved...
+        """
+
+
+        for index in BalanceSheet_Param_PChg_Df.index:
             try:
-                df = DF.loc[[index]].dropna(axis='columns')
+                tmp_df = BalanceSheet_Param_PChg_Df.loc[[index]].dropna(axis='columns')
             except:
                 Critical("{} has issue in this Dataframe".format(index))
                 continue
-            Col = []
-            for column in df.columns:
-                Col.append(column)
-            Sorted_List = sorted(set([q[:9] for q in sorted(Col)])) # Mar_14_15
-            Years = re.findall(r'\d+', " ".join(Sorted_List))
-            Mon = Col[2][:3]
-            print (Years)
+            All_Quarter_And_Values = []
+            for column in tmp_df.columns:
+                All_Quarter_And_Values.append(column)
+            Sorted_Years_Chg = sorted(set([q[:9] for q in sorted(All_Quarter_And_Values)])) # ['Mar_16_17', Mar_17_18, ...]
+            Years = re.findall(r'\d+', " ".join(Sorted_Years_Chg)) # ['16', '17']
+            Quarter = All_Quarter_And_Values[2][:3] # Mar
             Sorted_Years = sorted(set(Years))
             for i in range(len(set(Years)) - 1):
-                F_Year = '20'+Sorted_Years[i]
-                S_Year = '20'+Sorted_Years[i+1]
-                New_Attr = Mon +"_"+ Sorted_Years[i] +"_"+Sorted_Years[i+1]+"_Stock_Price_PChg"
-                F_Date = datetime(int(F_Year), 1, 4)
-                S_Date = datetime(int(S_Year), 1, 4)
-                F_Date = BMonthEnd().rollforward(F_Date)
-                S_Date = BMonthEnd().rollforward(S_Date)
+                F_Year = '20'+Sorted_Years[i] # 2016
+                S_Year = '20'+Sorted_Years[i+1] # 2017
+                New_Attr = Quarter +"_"+ Sorted_Years[i] +"_"+Sorted_Years[i+1]+"_Stock_Price_PChg" # Mar_16_17_Stock_Price_PChg
+                F_Date = datetime(int(F_Year), 1, 4) # 2016, Jan, 4
+                S_Date = datetime(int(S_Year), 1, 4) # 2017, Jan, 4
+                F_Date = BMonthEnd().rollforward(F_Date) # Last Working Date in 2016 Jan month
+                S_Date = BMonthEnd().rollforward(S_Date) # Last Working Date in 2017 Jan month
                 try:
-                    F_Stock_Price = FindData().Get_Stock_History(Stock=index, On_Date=F_Date)
-                    S_Stock_Price = FindData().Get_Stock_History(Stock=index, On_Date=S_Date)
+                    F_Stock_Price = find_data.Get_Stock_History(Stock=index, On_Date=F_Date)
+                    S_Stock_Price = find_data.Get_Stock_History(Stock=index, On_Date=S_Date)
                 except Exception as err:
                     Critical(err)
                     Critical("{} has no Close price on this date".format(index))
                     continue
-                Critical("F_Year :{}".format(F_Year))
-                Critical("S_Year :{}".format(S_Year))
-                Critical("F_Date:{}".format(F_Date))
-                Critical("S_Date :{}".format(S_Date))
-                Critical("F_Stock_Price: {}".format(F_Stock_Price))
-                Critical("S_Stock_Price :{}".format(S_Stock_Price))
                 try :
                     F_Stock_Price = F_Stock_Price[0][index]['Close']
                     S_Stock_Price = S_Stock_Price[0][index]['Close']
+
                 except Exception as err:
                     Critical(err)
                     Critical("{} has no Close price on Date ".format(index))
                     continue
-                print(F_Year , F_Stock_Price)
-                print(S_Year, S_Stock_Price)
                 Pchg = ((S_Stock_Price - F_Stock_Price)/F_Stock_Price) * 100
-                print(New_Attr , Pchg)
-                # df[New_Attr] = Pchg
-                DF = DF.set_value(index=index,col=New_Attr, value=Pchg)
-                # DF = DF.append(pd.DataFrame.from_dict({index:Pchg}, orient='index', columns=[New_Attr]), ignore_index=False)
-                Critical("Index : {} PChg : {}".format(index,Pchg))
-                print(DF[New_Attr])
 
-        return DF
+                Info("  F_Year : {} \n\
+                        S_Year : {} \n\
+                        New_Attr : {} \n\
+                        F_Date : {} F_Stock_Price : {}\n\
+                        S_Date : {} S_Stock_Price : {} \n\
+                        ".format(  F_Year,
+                                S_Year,
+                                New_Attr,
+                                F_Date,
+                                F_Stock_Price,
+                                S_Date,
+                                S_Stock_Price,
+                              ))
+                BalanceSheet_Param_PChg_Df = BalanceSheet_Param_PChg_Df.set_value(index=index,col=New_Attr, value=Pchg)
+
+        return BalanceSheet_Param_PChg_Df
 
 
 
@@ -185,11 +178,12 @@ if __name__ == "__main__":
 
     CSV_PATH_ORG = "C:/Users/nandpara/PycharmProjects/Machine_Learning1\Stock_Analysis_BalanceSheet.csv"
     CSV_PATH = os.path.join(os.path.dirname(__file__) + '_BalanceSheet_Param_PChg.csv')
+    Price_CHG_CSV_PATH = os.path.join(os.path.dirname(__file__) + 'Price_CHG.csv')
     Obj = Linear_Regression()
     df = Obj.Get_BalanceSheet_Data_For_Linear_Regression(from_csv=True)
-    Critical("Indexes in Main Balance Sheet df : {}".format(df.index))
+    # Critical("Indexes in Main Balance Sheet df : {}".format(df.index))
     df = Obj.Yearly_BalanceSheet_Param_Change_Percent(df)
-    # df = Obj.Yearly_Stock_Price_Change_Percent(df)
+    df = Obj.Yearly_Stock_Price_Change_Percent(df)
     # print ("Showing Yearly_BalanceSheet_Param_Change_Percent Detaails...")
     # print (df)
     # for col in df.columns:
@@ -199,7 +193,7 @@ if __name__ == "__main__":
     #     print ("Indexes : {}".format(index))
     # print (df[['Mar_13_14_Secured_Loan_PChg']])
     # df = Obj.Yearly_Stock_Price_Change_Percent(df)
-    df.to_csv(path_or_buf=CSV_PATH, index=True)
+    # df.to_csv(path_or_buf=Price_CHG_CSV_PATH, index=True)
     # print (df[['Mar_14_Share_Capital','Mar_15_Share_Capital','Mar_16_Share_Capital','Mar_17_Share_Capital','Mar_18_Share_Capital']])
     # for cosnt (new_df[column])
     # from Pandas_Practice.Pandas_Helpers import Df_view

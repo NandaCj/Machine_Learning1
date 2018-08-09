@@ -2,8 +2,10 @@ import requests
 from lxml.html import fromstring
 from bs4 import BeautifulSoup
 import re
-url = "https://economictimes.indiatimes.com/tvs-motor-company-ltd/balancesheet/companyid-9195.cms"
+# url = "https://economictimes.indiatimes.com/tvs-motor-company-ltd/balancesheet/companyid-9195.cms"
+url = "https://economictimes.indiatimes.com/infosys-ltd/quarterly/companyid-12940.cms"
 Response = requests.get(url)
+
 soup = BeautifulSoup(Response.text, 'html.parser')
 
 print(soup.find_all('tr')[2])

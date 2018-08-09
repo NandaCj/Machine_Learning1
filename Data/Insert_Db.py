@@ -5,6 +5,7 @@ from datetime import date
 from datetime import datetime
 from Helpers.Logging import *
 from Data.ET.Parse_ET_Balance_Sheet_Url import Parse_Balance_Sheet
+from Data.ET.Parse_ET_Quarterly_Result_Url import Parse_Qly_Profit_Loss
 
 Test_Columns = ['Symbol', 'Series', 'Prev Close', 'Open', 'High', 'Low', 'Last', 'Close', 'VWAP', 'Volume',
                         'Turnover', 'Trades', 'Deliverable Volume', '%Deliverble']
@@ -90,8 +91,34 @@ class InsertData:
             else:
                 Critical("{} Balance Sheet Details are not added in DB".format(Stock_Id))
 
+    def Insert_Qly_Profit_Loss(self, Limit=5):
+        QlyDict = False
+        Obj = Parse_Qly_Profit_Loss()
+        cursor = self.Db_Client.Stock_Info.Stock_List
+        #"_id":{'$in':Errored_Stock_List}
+        for Stock_Id in cursor.find({}, {"_id": 1})[:Limit]:
+            Stock_Id = Stock_Id["_id"]
+            print ("StockId : {}".format(Stock_Id))
+            try:
+                # Parsing of Url Starts here..
+                QlyDict = Obj.Parse_Qly_Url(Stock_Id)
+            except Exception as err:
+                Critical("Error in initating the Parse Balance Sheet Url... {}".format(err))
+            #print (BalanceSheetDict)
+            if QlyDict:
+                try:
+                    cursor = self.Db_Client.Stock_Info.QlySheet
+                    cursor.insert(QlyDict)
+                except Exception as err:
+                    Critical(err)
+                    Critical("Error in Inserting the Data to DB ...")
+
+            else:
+                Critical("{} Balance Sheet Details are not added in DB".format(Stock_Id))
+
 if __name__ == "__main__":
     Obj = InsertData()
     # Obj.Insert_Stock_Balance_Sheet(Limit=2000)
     # Obj.Insert_Stock_Names_List()
-    Obj.Insert_Stock_History_All()
+    # Obj.Insert_Stock_History_All()
+    Obj.Insert_Qly_Profit_Loss(Limit=2000)

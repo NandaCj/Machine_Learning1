@@ -20,6 +20,15 @@ class FindData:
         Info("DB Clinet : {}".format(self.Db_Client))
 
     @property
+    def ET_Urls_Cursor(self):
+        return self.Db_Client.ET.ETUrls
+
+    @property
+    def ET_Urls_Dict(self):
+        ET_Urls_Dict = list(self.ET_Urls_Cursor.find({}))[0]
+        return ET_Urls_Dict
+
+    @property
     def Get_Balance_Sheet_Details(self):
         cursor = self.Db_Client.Stock_Info.BalanceSheet
         Result = cursor.find({})
@@ -31,6 +40,22 @@ class FindData:
     def Get_Stock_Split_Url(self):
         cursor = self.Db_Client.ET.ETUrls
         return list(cursor.find({}, {"_id":0, 'StockSplit':1}))[0]['StockSplit']
+
+    def Get_Stock_And_ET_Id_Dict(self, Specific_Stock_Id = False):
+        if Specific_Stock_Id:
+            Stock_And_ET_Id_Dict = list(self.Db_Client.ET.ETCompanyCodes.find({}, {"_id": 0, Specific_Stock_Id: 1}))[0]
+        else:
+            Stock_And_ET_Id_Dict = list(self.Db_Client.ET.ETCompanyCodes.find({}))[0]
+        Info("Stock_And_ET_Id_Dict : {}".format(Stock_And_ET_Id_Dict))
+        return Stock_And_ET_Id_Dict
+
+    def Get_Qly_Url_For_Stock(self, Stock_Id):
+        General_Qly_Url = self.ET_Urls_Dict['QuarterlyProfitLoss']
+        Stock_And_ET_Id_Dict = self.Get_Stock_And_ET_Id_Dict(Specific_Stock_Id=Stock_Id)
+        for Stock_Id, ET_Id in Stock_And_ET_Id_Dict.items():
+            Qly_Url_For_Stock = re.sub('Code', ET_Id, General_Qly_Url)
+            Info("Qly_Url_For_Stock : {}". format(Qly_Url_For_Stock))
+        return Qly_Url_For_Stock
 
     def Get_Stock_Codes(self):
         Info("Quering Stock Codes...")
@@ -54,6 +79,8 @@ class FindData:
             Stock_And_ET_Id_Dict = list(self.Db_Client.ET.ETCompanyCodes.find({}))[0]
 
         return Stock_And_ET_Id_Dict
+
+
 
     def Get_ET_Id_Missing_Stock_Ids(self):
         pass

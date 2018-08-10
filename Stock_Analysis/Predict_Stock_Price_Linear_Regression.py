@@ -202,9 +202,13 @@ class Linear_Regression:
         print (df)
         # self.Yearly_BalanceSheet_Param_Change_Percent(Ba)
         print(df.columns)
-
-        df.rename({'Sep_17_PAT':'NEW'}, axis=1, inplace=True)
-        print(df.columns)
+        New_Cols = {}
+        for Old in df.columns:
+            New = Ord_Qlys_alias[Old[:6]] + Old[6:]
+            New_Cols[Old] = New
+        print(New_Cols)
+        df.rename(New_Cols, axis=1, inplace=True)
+        print(df)
 
 
 

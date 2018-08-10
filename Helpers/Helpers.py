@@ -71,6 +71,41 @@ class Date_Helpers:
             self.Previous_Working_Day(PDate)
         return PDate
 
+    def Qly_Increasing_Order(self, Qlys):
+        Q_str_Dt_Dict = {}
+        for Q_str in Qlys:
+            month , year = Q_str.split("_")
+            Q_dt = self.Last_Working_Day('01', month, year)
+            Q_str_Dt_Dict[Q_str] = Q_dt # {"Mar_18" : Timestamp('2018-03-30 00:00:00')}
+
+        Q_dt_list = Q_str_Dt_Dict.values() # [Timestamp('2017-09-29 00:00:00'), Timestamp('2018-03-30 00:00:00'), Timestamp('2017-06-30 00:00:00'), Timestamp('2017-12-29 00:00:00'), Timestamp('2017-03-31 00:00:00')]
+        Ord_Qlys = []
+        for Q_dt in sorted(Q_dt_list)[::-1]:
+            for key, value in Q_str_Dt_Dict.iteritems():
+                if value == Q_dt:
+                    Ord_Qlys.append(key)
+
+        # With_Alias_Ordered_Q_str = {'Q'+ num : i for num , i in  {num , i for num , i in zip(Ordered_Q_str, range(1, len(Ordered_Q_str) + 1))}}
+        Ord_Qlys_alias = {}
+        for Qly in Ord_Qlys:
+            Ord_Qlys_alias[Qly] = 'RQ_' + str(Ord_Qlys.index(Qly) + 1)
+
+        Info("Qlys              :{}".format(Qlys))
+        Info("Ord_Qlys          :{}".format(Ord_Qlys))
+        Info("Ord_Qlys_alias    :{}".format(Ord_Qlys_alias))
+        """
+        Sample :
+        Input :
+            [u'Jun_17', u'Sep_17', u'Dec_17', u'Mar_17', u'Mar_18']
+        Output :
+            [u'Mar_18', u'Dec_17', u'Sep_17', u'Jun_17', u'Mar_17']
+            {u'Sep_17': 'RQ_3', u'Mar_18': 'RQ_1', u'Jun_17': 'RQ_4', u'Dec_17': 'RQ_2', u'Mar_17': 'RQ_5'}    
+        
+        """
+        return Ord_Qlys, Ord_Qlys_alias
+
+
+
 
 class Stock_Price:
 
@@ -112,10 +147,11 @@ class Stock_Price:
 
 
 if __name__ == "__main__":
-    # Obj = Date_Helpers()
+    Obj = Date_Helpers()
+    Obj.Qly_Increasing_Order([u'Jun_17', u'Sep_17', u'Dec_17', u'Mar_17', u'Mar_18'])
     # LDate = Obj.Last_Working_Day(month='Sep', year='18'); print(LDate)
     # Obj.Previous_Working_Day(Date=LDate)
     # Obj.First_Working_Day(month='Sep', year='17')
-    Obj = Stock_Price()
+    # Obj = Stock_Price()
     # Obj.Get_Close_Price_On_Date()
-    Obj.Get_Close_Price_On_Month_End(Stock_Id='FRETAIL', Month='Mar', Year='18')
+    # Obj.Get_Close_Price_On_Month_End(Stock_Id='FRETAIL', Month='Mar', Year='18')

@@ -11,12 +11,15 @@ import os, re
 from datetime import datetime
 from pandas.tseries.offsets import BMonthEnd
 Filler = "****************************************************************"
+# Req_Qly_Cols = ['PAT', 'Operating_Profit', 'Total_Exp', 'Ebit', 'Ebitda', 'Close']
+Req_Qly_Cols = ['PAT', 'Close']
+
 class Linear_Regression:
 
     def __init__(self):
         pass
 
-    def Make_BalanceSheet_Dataframe(self, BalanceSheet_Detail_For_All_Stock):
+    def Make_BalanceSheet_Dataframe(self, BalanceSheet_Detail_For_All_Stock, ):
         Info(Filler)
         Different_Format_Stocks = []
         Stock = ""
@@ -36,6 +39,8 @@ class Linear_Regression:
                     for Each_Attr in Each_Stock_BalanceSheet_Data[Each_Quarter].keys():#['Net_Worth', 'Capital'] for Mar_17
                         BalanceSheet_Attr_Value = Each_Stock_BalanceSheet_Data[Each_Quarter][Each_Attr] # 100
                         BalanceSheet_Attr = Each_Quarter + "_" + Each_Attr # Mar_17_Net_Worth
+
+
                         BalanceSheet_Dict[Stock][BalanceSheet_Attr] = BalanceSheet_Attr_Value # {'HDFC':{'Mar_17_Net_Worth':100}}
                         df_Columns.append(BalanceSheet_Attr)
                 Info("Generated Balance Sheet Dataframe for {}".format(Stock))
@@ -172,18 +177,52 @@ class Linear_Regression:
 
         return BalanceSheet_Param_PChg_Df
 
+    def Get_Qly_Data_For_Linear_Regression(self):
+        from Helpers.Helpers import Date_Helpers
+        dh = Date_Helpers()
+
+        All_Stocks_Qly = list(FindData().Get_Qly_Details)
+        for stock in All_Stocks_Qly:
+            Qlys = [Q for Q in stock.keys() if Q != "_id"]
+
+        Ord_Qlys , Ord_Qlys_alias = dh.Qly_Increasing_Order(Qlys=Qlys)
+        #Cols = {col:1 for(col) in Ord_Qlys }
+        # Cols = {"Mar_18.PAT":1 , "Dec_17.PAT":1, "Sep_17.PAT":1, "Jun_17.PAT":1}
+        Cols = {}
+        for Qly in Qlys:
+            for Col in Req_Qly_Cols:
+                Cols[Qly+"."+Col] = 1
+
+        Info(Cols)
+
+        Req_Cols = list(FindData().Get_Qly_For_Cols(Cols=Cols))
+        Info(Req_Cols)
+
+        df = self.Make_BalanceSheet_Dataframe(BalanceSheet_Detail_For_All_Stock=Req_Cols)
+        print (df)
+        # self.Yearly_BalanceSheet_Param_Change_Percent(Ba)
+        print(df.columns)
+
+        df.rename({'Sep_17_PAT':'NEW'}, axis=1, inplace=True)
+        print(df.columns)
+
+
+
+        # BalanceSheet_df = self.Make_BalanceSheet_Dataframe(BalanceSheet_Details_From_DB)
 
 
 if __name__ == "__main__":
 
-    CSV_PATH_ORG = "C:/Users/nandpara/PycharmProjects/Machine_Learning1\Stock_Analysis_BalanceSheet.csv"
-    CSV_PATH = os.path.join(os.path.dirname(__file__) + '_BalanceSheet_Param_PChg.csv')
-    Price_CHG_CSV_PATH = os.path.join(os.path.dirname(__file__) + 'Price_CHG.csv')
+    # CSV_PATH_ORG = "C:/Users/nandpara/PycharmProjects/Machine_Learning1\Stock_Analysis_BalanceSheet.csv"
+    # CSV_PATH = os.path.join(os.path.dirname(__file__) + '_BalanceSheet_Param_PChg.csv')
+    # Price_CHG_CSV_PATH = os.path.join(os.path.dirname(__file__) + 'Price_CHG.csv')
     Obj = Linear_Regression()
-    df = Obj.Get_BalanceSheet_Data_For_Linear_Regression(from_csv=True)
+    Obj.Get_Qly_Data_For_Linear_Regression()
+
+    # df = Obj.Get_BalanceSheet_Data_For_Linear_Regression(from_csv=True)
     # Critical("Indexes in Main Balance Sheet df : {}".format(df.index))
-    df = Obj.Yearly_BalanceSheet_Param_Change_Percent(df)
-    df = Obj.Yearly_Stock_Price_Change_Percent(df)
+    # df = Obj.Yearly_BalanceSheet_Param_Change_Percent(df)
+    # df = Obj.Yearly_Stock_Price_Change_Percent(df)
     # print ("Showing Yearly_BalanceSheet_Param_Change_Percent Detaails...")
     # print (df)
     # for col in df.columns:

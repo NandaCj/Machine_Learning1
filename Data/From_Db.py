@@ -37,9 +37,22 @@ class FindData:
         return Result
 
     @property
+    def Get_Qly_Details(self):
+        cursor = self.Db_Client.Stock_Info.QlySheet
+        Result = cursor.find({}).limit(2)
+        # Result = cursor.find({"_id" : {'$in': ["HDFC", "SBIN"] }})
+        # print (list(Result))
+        return Result
+
+    @property
     def Get_Stock_Split_Url(self):
         cursor = self.Db_Client.ET.ETUrls
         return list(cursor.find({}, {"_id":0, 'StockSplit':1}))[0]['StockSplit']
+
+    def Get_Qly_For_Cols(self, Cols):
+        cursor = self.Db_Client.Stock_Info.QlySheet
+        Result = cursor.find({}, Cols).limit(2)
+        return Result
 
     def Get_Stock_And_ET_Id_Dict(self, Specific_Stock_Id = False):
         if Specific_Stock_Id:

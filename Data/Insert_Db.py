@@ -121,4 +121,4 @@ if __name__ == "__main__":
     # Obj.Insert_Stock_Balance_Sheet(Limit=2000)
     # Obj.Insert_Stock_Names_List()
     # Obj.Insert_Stock_History_All()
-    Obj.Insert_Qly_Profit_Loss(Limit=2000)
+    Obj.Insert_Qly_Profit_Loss(Limit=20)

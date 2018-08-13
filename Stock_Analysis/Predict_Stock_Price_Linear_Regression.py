@@ -209,19 +209,50 @@ class Linear_Regression:
         print(New_Cols)
         df.rename(New_Cols, axis=1, inplace=True)
         print(df)
-
+        return df
 
 
         # BalanceSheet_df = self.Make_BalanceSheet_Dataframe(BalanceSheet_Details_From_DB)
 
+    def Qly_Param_Pchg(self, Qly_Df=None):
+        Qly_Param_PChg_Df = pd.DataFrame()
+        for index in Qly_Df.index:
+            New_DF = pd.DataFrame()  # Create New BalaceSheet Df for each Stock
+            All_Quarter_And_Values = []  # ['Mar_16_Net_Worth', 'Mar_17_Net_Worth', etc...]
+            for column in Qly_Df.columns:
+                All_Quarter_And_Values.append(column)
+            print (All_Quarter_And_Values)
+
+            Sorted_Quarters = sorted(set([q[:4] for q in sorted(All_Quarter_And_Values)]))  # ['Mar_16', Mar_17, ...]
+            print(Sorted_Quarters)
+            for i in range(len(Sorted_Quarters) - 1):
+                Quarter = Sorted_Quarters[i][:2]  # Mar_
+                L_Year = Sorted_Quarters[i][3:4]  # 16
+                H_Year = Sorted_Quarters[i + 1][3:4]  # 17
+                for attr in Req_Qly_Cols:
+                    New_attr = Quarter + "_" + L_Year + "_" + H_Year + "_" + attr + "_PChg"  # Mar_16_17_Net_Worth_Pchg
+                    L_Column = Quarter + "_" + L_Year + "_" + attr  # Mar_16_Net_Worth
+                    H_Column = Quarter + "_" + H_Year + "_" + attr  # Mar_17_Net_Worth
+                    try:
+                        Pchg = ((Qly_Df[H_Column] - Qly_Df[L_Column]) / Qly_Df[L_Column]) * 100
+                        New_DF[New_attr] = Pchg
+                    except KeyError:
+                        Critical("{} does not have this key...".format(index))
+                        continue
+            Info("calculated for {}".format(index))
+            Qly_Param_PChg_Df = Qly_Param_PChg_Df.append(New_DF)  # This is done bcoz we need a New_DF created for Each Stock
+        return Qly_Param_PChg_Df
 
 if __name__ == "__main__":
 
     # CSV_PATH_ORG = "C:/Users/nandpara/PycharmProjects/Machine_Learning1\Stock_Analysis_BalanceSheet.csv"
-    # CSV_PATH = os.path.join(os.path.dirname(__file__) + '_BalanceSheet_Param_PChg.csv')
+    CSV_PATH = os.path.join(os.path.dirname(__file__) + '_BalanceSheet_Param_PChg.csv')
     # Price_CHG_CSV_PATH = os.path.join(os.path.dirname(__file__) + 'Price_CHG.csv')
+    Qly_CSV_PATH = os.path.join(os.path.dirname(__file__) + 'Qly_Details.csv')
     Obj = Linear_Regression()
-    Obj.Get_Qly_Data_For_Linear_Regression()
+    df = Obj.Get_Qly_Data_For_Linear_Regression()
+    # df = Obj.Qly_Param_Pchg(Qly_Df=df)
+    print (df)
 
     # df = Obj.Get_BalanceSheet_Data_For_Linear_Regression(from_csv=True)
     # Critical("Indexes in Main Balance Sheet df : {}".format(df.index))
@@ -236,7 +267,7 @@ if __name__ == "__main__":
     #     print ("Indexes : {}".format(index))
     # print (df[['Mar_13_14_Secured_Loan_PChg']])
     # df = Obj.Yearly_Stock_Price_Change_Percent(df)
-    # df.to_csv(path_or_buf=Price_CHG_CSV_PATH, index=True)
+    # df.to_csv(path_or_buf=Qly_CSV_PATH, index=True)
     # print (df[['Mar_14_Share_Capital','Mar_15_Share_Capital','Mar_16_Share_Capital','Mar_17_Share_Capital','Mar_18_Share_Capital']])
     # for cosnt (new_df[column])
     # from Pandas_Practice.Pandas_Helpers import Df_view

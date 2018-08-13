@@ -39,7 +39,9 @@ class FindData:
     @property
     def Get_Qly_Details(self):
         cursor = self.Db_Client.Stock_Info.QlySheet
-        Result = cursor.find({}).limit(2)
+        Result = cursor.find({})
+        # print (list(Result))
+        # Info("Total number of Results = {}".format(len(list(cursor))))
         # Result = cursor.find({"_id" : {'$in': ["HDFC", "SBIN"] }})
         # print (list(Result))
         return Result

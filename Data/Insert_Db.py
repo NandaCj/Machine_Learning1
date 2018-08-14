@@ -96,7 +96,7 @@ class InsertData:
         Obj = Parse_Qly_Profit_Loss()
         cursor = self.Db_Client.Stock_Info.Stock_List
         #"_id":{'$in':Errored_Stock_List}
-        for Stock_Id in cursor.find({}, {"_id": 1})[:Limit]:
+        for Stock_Id in cursor.find({}, {"_id": 1})[380:Limit]:
             Stock_Id = Stock_Id["_id"]
             print ("StockId : {}".format(Stock_Id))
             try:
@@ -121,4 +121,4 @@ if __name__ == "__main__":
     # Obj.Insert_Stock_Balance_Sheet(Limit=2000)
     # Obj.Insert_Stock_Names_List()
     # Obj.Insert_Stock_History_All()
-    Obj.Insert_Qly_Profit_Loss(Limit=20)
+    Obj.Insert_Qly_Profit_Loss(Limit=2000)

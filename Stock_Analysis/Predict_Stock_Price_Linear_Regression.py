@@ -11,8 +11,8 @@ import os, re
 from datetime import datetime
 from pandas.tseries.offsets import BMonthEnd
 Filler = "****************************************************************"
-# Req_Qly_Cols = ['PAT', 'Operating_Profit', 'Total_Exp', 'Ebit', 'Ebitda', 'Close']
-Req_Qly_Cols = ['PAT', 'Close']
+Req_Qly_Cols = ['PAT', 'Operating_Profit', 'Total_Exp', 'Ebit', 'Ebitda', 'Close']
+# Req_Qly_Cols = ['PAT', 'Close']
 
 class Linear_Regression:
 
@@ -179,11 +179,19 @@ class Linear_Regression:
 
     def Get_Qly_Data_For_Linear_Regression(self):
         from Helpers.Helpers import Date_Helpers
+        import time
         dh = Date_Helpers()
 
         All_Stocks_Qly = list(FindData().Get_Qly_Details)
+        time.sleep(5)
+        Info(All_Stocks_Qly)
+        Qlys = []
         for stock in All_Stocks_Qly:
-            Qlys = [Q for Q in stock.keys() if Q != "_id"]
+            Info("Getting Stock Details..")
+            Qlys += [Q for Q in stock.keys() if Q != "_id"]
+            Info(Qlys)
+        Qlys = list(set(Qlys))
+        Critical(Qlys)
 
         Ord_Qlys , Ord_Qlys_alias = dh.Qly_Increasing_Order(Qlys=Qlys)
         #Cols = {col:1 for(col) in Ord_Qlys }
@@ -199,32 +207,31 @@ class Linear_Regression:
         Info(Req_Cols)
 
         df = self.Make_BalanceSheet_Dataframe(BalanceSheet_Detail_For_All_Stock=Req_Cols)
-        print (df)
+        # print (df)
         # self.Yearly_BalanceSheet_Param_Change_Percent(Ba)
-        print(df.columns)
+        # print(df.columns)
         New_Cols = {}
         for Old in df.columns:
             New = Ord_Qlys_alias[Old[:6]] + Old[6:]
             New_Cols[Old] = New
-        print(New_Cols)
+        # print(New_Cols)
         df.rename(New_Cols, axis=1, inplace=True)
-        print(df)
+        # print(df)
         return df
 
 
         # BalanceSheet_df = self.Make_BalanceSheet_Dataframe(BalanceSheet_Details_From_DB)
 
     def Qly_Param_Pchg(self, Qly_Df=None):
-        Qly_Param_PChg_Df = pd.DataFrame()
+        Final = pd.DataFrame()
         for index in Qly_Df.index:
+            tmp_df = pd.DataFrame()
             New_DF = pd.DataFrame()  # Create New BalaceSheet Df for each Stock
             All_Quarter_And_Values = []  # ['Mar_16_Net_Worth', 'Mar_17_Net_Worth', etc...]
             for column in Qly_Df.columns:
                 All_Quarter_And_Values.append(column)
-            print (All_Quarter_And_Values)
 
             Sorted_Quarters = sorted(set([q[:4] for q in sorted(All_Quarter_And_Values)]))  # ['Mar_16', Mar_17, ...]
-            print(Sorted_Quarters)
             for i in range(len(Sorted_Quarters) - 1):
                 Quarter = Sorted_Quarters[i][:2]  # Mar_
                 L_Year = Sorted_Quarters[i][3:4]  # 16
@@ -233,15 +240,16 @@ class Linear_Regression:
                     New_attr = Quarter + "_" + L_Year + "_" + H_Year + "_" + attr + "_PChg"  # Mar_16_17_Net_Worth_Pchg
                     L_Column = Quarter + "_" + L_Year + "_" + attr  # Mar_16_Net_Worth
                     H_Column = Quarter + "_" + H_Year + "_" + attr  # Mar_17_Net_Worth
+                    # print (New_attr , L_Column, H_Column) #(u'RQ_1_2_PAT_PChg', u'RQ_1_PAT', u'RQ_2_PAT')
                     try:
-                        Pchg = ((Qly_Df[H_Column] - Qly_Df[L_Column]) / Qly_Df[L_Column]) * 100
+                        Pchg = ((Qly_Df[L_Column] - Qly_Df[H_Column]) / Qly_Df[H_Column]) * 100
                         New_DF[New_attr] = Pchg
                     except KeyError:
                         Critical("{} does not have this key...".format(index))
                         continue
             Info("calculated for {}".format(index))
-            Qly_Param_PChg_Df = Qly_Param_PChg_Df.append(New_DF)  # This is done bcoz we need a New_DF created for Each Stock
-        return Qly_Param_PChg_Df
+            Final = tmp_df.append(New_DF)  # This is done bcoz we need a New_DF created for Each Stock
+        return Final
 
 if __name__ == "__main__":
 
@@ -251,7 +259,7 @@ if __name__ == "__main__":
     Qly_CSV_PATH = os.path.join(os.path.dirname(__file__) + 'Qly_Details.csv')
     Obj = Linear_Regression()
     df = Obj.Get_Qly_Data_For_Linear_Regression()
-    # df = Obj.Qly_Param_Pchg(Qly_Df=df)
+    df = Obj.Qly_Param_Pchg(Qly_Df=df)
     print (df)
 
     # df = Obj.Get_BalanceSheet_Data_For_Linear_Regression(from_csv=True)
@@ -267,7 +275,7 @@ if __name__ == "__main__":
     #     print ("Indexes : {}".format(index))
     # print (df[['Mar_13_14_Secured_Loan_PChg']])
     # df = Obj.Yearly_Stock_Price_Change_Percent(df)
-    # df.to_csv(path_or_buf=Qly_CSV_PATH, index=True)
+    df.to_csv(path_or_buf=Qly_CSV_PATH, index=True)
     # print (df[['Mar_14_Share_Capital','Mar_15_Share_Capital','Mar_16_Share_Capital','Mar_17_Share_Capital','Mar_18_Share_Capital']])
     # for cosnt (new_df[column])
     # from Pandas_Practice.Pandas_Helpers import Df_view

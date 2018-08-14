@@ -40,7 +40,7 @@ class FindData:
     def Get_Qly_Details(self):
         cursor = self.Db_Client.Stock_Info.QlySheet
         Result = cursor.find({})
-        # print (list(Result))
+        # Info (list(Result))
         # Info("Total number of Results = {}".format(len(list(cursor))))
         # Result = cursor.find({"_id" : {'$in': ["HDFC", "SBIN"] }})
         # print (list(Result))
@@ -53,7 +53,7 @@ class FindData:
 
     def Get_Qly_For_Cols(self, Cols):
         cursor = self.Db_Client.Stock_Info.QlySheet
-        Result = cursor.find({}, Cols).limit(2)
+        Result = cursor.find({}, Cols)
         return Result
 
     def Get_Stock_And_ET_Id_Dict(self, Specific_Stock_Id = False):

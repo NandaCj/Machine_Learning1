@@ -51,9 +51,9 @@ class FindData:
         cursor = self.Db_Client.ET.ETUrls
         return list(cursor.find({}, {"_id":0, 'StockSplit':1}))[0]['StockSplit']
 
-    def Get_Qly_For_Cols(self, Cols):
+    def Get_Qly_For_Cols(self, Stock_Id = '', Cols=''):
         cursor = self.Db_Client.Stock_Info.QlySheet
-        Result = cursor.find({}, Cols)
+        Result = cursor.find({"_id":Stock_Id}, Cols)
         return Result
 
     def Get_Stock_And_ET_Id_Dict(self, Specific_Stock_Id = False):

@@ -18,5 +18,11 @@ Percent Change in Each Param:
         Percent_Change_in_Netwoth --> Percent_Change_in_Stock_Price
 
 
+Questions:
+    Should i Categorize first and elimate Ouliers ? or Reverse ?
+
+
+Outliers Explained Breifly :
+https://www.analyticsvidhya.com/blog/2016/01/guide-data-exploration/#three
 
 

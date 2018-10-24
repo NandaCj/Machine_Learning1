@@ -1,6 +1,5 @@
 from sklearn.datasets import load_iris
-# from sklearn.tree import DecisionTreeRegressor as Tree_Class
-from sklearn.tree import DecisionTreeClassifier as Tree_Class
+from sklearn.tree import DecisionTreeRegressor as Tree_Class
 from sklearn.tree import export_graphviz
 import pandas as pd
 import numpy as np
@@ -28,18 +27,15 @@ print(df)
 #                     [35,1],
 #                     [36,1],
 #                     ])
-good = 'good'
-bad = 'bad'
-ok = 'ok'
-Feature = np.array([[100], [200], [300], [400], [500], [600]])
-Value = np.array([[good], [good], [good], [bad], [bad], [ok]])
-# Feature = df[['Age']]
-# Value = df[['salary']]
+# Value = np.array([100, 200, 300, 400, 500, 600])
+Value = np.array([[100], [100], [100], [400], [500], [600]])
+Feature = df[['Age']]
+Value = df[['salary']]
 Tree_Class = Tree_Class()
-print(Tree_Class.fit(Feature, Value))
+print(Tree_Class.fit(df, Value))
 print(Tree_Class.predict([[33]]))
 
 
 
-export_graphviz(Tree_Class, out_file='sample_decision_tree.dot', feature_names=['Age'], class_names=[bad, good, ok], rounded=True,filled=True)
+export_graphviz(Tree_Class, out_file='sample_decision_tree.dot', feature_names=['Age'], class_names='Salary', rounded=True,filled=True)
 #http://webgraphviz.com/

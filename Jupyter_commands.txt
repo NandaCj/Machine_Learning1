@@ -1,0 +1,2 @@
+Lanch notebook :
+jupyter.exe notebook

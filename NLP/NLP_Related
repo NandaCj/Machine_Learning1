@@ -1,0 +1,17 @@
+Data_Cleaning Is Task Specific
+
+Corpus - Body of text, singular. Corpora is the plural of this. Example: A collection of medical journals.
+Lexicon - Words and their meanings. Example: English dictionary. Consider, however, that various fields will have different lexicons. For example: To a financial investor, the first meaning for the word "Bull" is someone who is confident about the market, as compared to the common English lexicon, where the first meaning for the word "Bull" is an animal. As such, there is a special lexicon for financial investors, doctors, children, mechanics, and so on.
+Token - each word/punctation/symbol is Token
+Lemmatize - grouping together the different inflected forms of a word so they can be analysed as a single item.
+Stemming - words to their stem, base or root form
+
+Stemming Algorithms:
+Porter stemmers is the least strict and
+Lancaster is the strictest.
+Snowball stemmer is good to use in terms of speed as well as strictness.
+
+Note :
+word_tokenize treats punctuations as new word
+isalpha is used to check if its a word with alpha_numeric and it gives false for 'word (as "'" is used in begining of word)
+

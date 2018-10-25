@@ -1,0 +1,21 @@
+digraph Tree {
+node [shape=box, style="filled, rounded", color="black", fontname=helvetica] ;
+edge [fontname=helvetica] ;
+0 [label="RQ_1_2_Ebit_PChg <= -46.851\nmse = 1955.85\nsamples = 5\nvalue = -15.023", fillcolor="#e58139af"] ;
+1 [label="mse = 0.0\nsamples = 1\nvalue = -100.0", fillcolor="#e5813900"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="RQ_1_2_Total_Exp_PChg <= 15.313\nmse = 188.236\nsamples = 4\nvalue = 6.221", fillcolor="#e58139da"] ;
+0 -> 2 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+3 [label="RQ_1_2_Total_Exp_PChg <= 5.017\nmse = 63.055\nsamples = 3\nvalue = 13.075", fillcolor="#e58139e8"] ;
+2 -> 3 ;
+4 [label="RQ_1_2_Ebit_PChg <= -10.277\nmse = 4.033\nsamples = 2\nvalue = 7.581", fillcolor="#e58139dd"] ;
+3 -> 4 ;
+5 [label="mse = 0.0\nsamples = 1\nvalue = 9.59", fillcolor="#e58139e1"] ;
+4 -> 5 ;
+6 [label="mse = 0.0\nsamples = 1\nvalue = 5.573", fillcolor="#e58139d9"] ;
+4 -> 6 ;
+7 [label="mse = 0.0\nsamples = 1\nvalue = 24.063", fillcolor="#e58139ff"] ;
+3 -> 7 ;
+8 [label="mse = -0.0\nsamples = 1\nvalue = -14.342", fillcolor="#e58139b0"] ;
+2 -> 8 ;
+}

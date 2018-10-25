@@ -1,4 +1,4 @@
-import os
+import os, re
 from collections import defaultdict
 from Possible_Stock_Names import Nifty50
 
@@ -24,11 +24,9 @@ class Prepare_News_Stat():
     def stock_specific_news(self, news_line):
         for stock_code, stock_names in Nifty50.items():
             for stock_name in stock_names:
-                if stock_name in news_line:
+                if re.search('\\b{}\\b'.format(stock_name), news_line):
                     print(stock_code , "-->" , news_line)
 
-    def summa(self):
-        pass
 
 
 obj = Prepare_News_Stat()

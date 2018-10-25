@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="720ea437-f346-4bdf-a717-241ceec12ad4" name="Default" comment="" />
+    <list default="true" id="720ea437-f346-4bdf-a717-241ceec12ad4" name="Default" comment="new commit Oct 24">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stock_News_Analysis/Clean_Data/Possible_Stock_Names.py" beforeDir="false" afterPath="$PROJECT_DIR$/Stock_News_Analysis/Clean_Data/Possible_Stock_Names.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Stock_News_Analysis/Clean_Data/Prepare_Data_Stats_For_Analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/Stock_News_Analysis/Clean_Data/Prepare_Data_Stats_For_Analysis.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,7 +32,8 @@
     <SUITE FILE_PATH="coverage/Machine_Learning1$Find_stock_Price_Volume_difference_from_previous_days.coverage" NAME="Find_stock_Price_Volume_difference_from_previous_days Coverage Results" MODIFIED="1531197766464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Analytics_Vidhya" />
     <SUITE FILE_PATH="coverage/Machine_Learning1$GetBalanceSheet.coverage" NAME="GetBalanceSheet Coverage Results" MODIFIED="1531825347556" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Data/ET" />
     <SUITE FILE_PATH="coverage/Machine_Learning1$Sorting_DF.coverage" NAME="Sorting_DF Coverage Results" MODIFIED="1534785293002" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Pandas_Practice" />
-    <SUITE FILE_PATH="coverage/Machine_Learning1$Prepare_Data_Stats_For_Analysis.coverage" NAME="Prepare_Data_Stats_For_Analysis Coverage Results" MODIFIED="1540390958677" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Stock_News_Analysis/Clean_Data" />
+    <SUITE FILE_PATH="coverage/Machine_Learning1$Possible_Stock_Names.coverage" NAME="Possible_Stock_Names Coverage Results" MODIFIED="1540473862113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Stock_News_Analysis/Clean_Data" />
+    <SUITE FILE_PATH="coverage/Machine_Learning1$Prepare_Data_Stats_For_Analysis.coverage" NAME="Prepare_Data_Stats_For_Analysis Coverage Results" MODIFIED="1540474017714" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Stock_News_Analysis/Clean_Data" />
     <SUITE FILE_PATH="coverage/Machine_Learning1$Pandas_Helpers.coverage" NAME="Pandas_Helpers Coverage Results" MODIFIED="1532620878961" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Pandas_Practice" />
     <SUITE FILE_PATH="coverage/Machine_Learning1$Threading_Practice.coverage" NAME="Threading_Practice Coverage Results" MODIFIED="1538130411637" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Python_Practice" />
     <SUITE FILE_PATH="coverage/Machine_Learning1$Numpy_Array_Attributes.coverage" NAME="Numpy_Array_Attributes Coverage Results" MODIFIED="1531130742546" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Numpy_Practice" />
@@ -72,7 +77,7 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.7501769">
+    <splitter split-orientation="horizontal" split-proportion="0.81847477">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
           <file leaf-file-name="Clean_News_Data_File.py" pinned="false" current-in-tab="false">
@@ -90,19 +95,46 @@
           <file leaf-file-name="Possible_Stock_Names.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Stock_News_Analysis/Clean_Data/Possible_Stock_Names.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="177">
-                  <caret line="36" column="32" selection-start-line="36" selection-start-column="32" selection-end-line="36" selection-end-column="32" />
+                <state relative-caret-position="450">
+                  <caret line="48" column="49" selection-start-line="48" selection-start-column="49" selection-end-line="48" selection-end-column="49" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Prepare_Data_Stats_For_Analysis.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="Prepare_Data_Stats_For_Analysis.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Stock_News_Analysis/Clean_Data/Prepare_Data_Stats_For_Analysis.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="393">
-                  <caret line="35" column="24" lean-forward="true" selection-start-line="35" selection-start-column="24" selection-end-line="35" selection-end-column="24" />
+                <state relative-caret-position="308">
+                  <caret line="29" selection-start-line="29" selection-end-line="29" />
                   <folding>
-                    <element signature="e#0#9#0" expanded="true" />
+                    <element signature="e#0#13#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Get_Nse_Scrips.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Market/Nse_Modules/Get_Nse_Scrips.py">
+              <provider selected="true" editor-type-id="text-editor" />
+            </entry>
+          </file>
+          <file leaf-file-name="pivot_stratergy.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Market/Nse_Modules/pivot_stratergy.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-679">
+                  <folding>
+                    <element signature="e#0#10#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Helpers.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/Helpers/Helpers.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-2640">
+                  <folding>
+                    <element signature="e#0#13#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -111,20 +143,8 @@
           <file leaf-file-name="Get_ET_Archieved_News.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Market/Nse_Modules/Get_ET_Archieved_News.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="218">
-                  <caret line="81" selection-start-line="81" selection-end-line="88" selection-end-column="35" />
-                  <folding>
-                    <element signature="e#0#15#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="GetNseNews.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Market/GetNseNews.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="576">
-                  <caret line="116" selection-start-line="116" selection-end-line="116" />
+                <state relative-caret-position="177">
+                  <caret line="81" column="43" selection-start-line="81" selection-start-column="38" selection-end-line="81" selection-end-column="43" />
                   <folding>
                     <element signature="e#0#15#0" expanded="true" />
                   </folding>
@@ -135,8 +155,8 @@
           <file leaf-file-name="Rough" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Stock_News_Analysis/Clean_Data/Rough">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="99">
-                  <caret line="26" column="16" lean-forward="true" selection-end-line="49" selection-end-column="10" />
+                <state relative-caret-position="121">
+                  <caret line="27" column="10" lean-forward="true" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
                 </state>
               </provider>
             </entry>
@@ -150,29 +170,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Parse_ET_Balance_Sheet_Url.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Data/ET/Parse_ET_Balance_Sheet_Url.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="52">
-                  <caret line="149" column="34" selection-start-line="149" selection-start-column="34" selection-end-line="149" selection-end-column="34" />
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="Logging.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Helpers/Logging.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="66">
                   <caret line="3" column="31" selection-start-line="3" selection-start-column="31" selection-end-line="3" selection-end-column="31" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="NLP_Related" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/NLP/NLP_Related">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="176">
-                  <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
                 </state>
               </provider>
             </entry>
@@ -190,11 +192,20 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Filtered_News_File.txt" pinned="false" current-in-tab="true">
+          <file leaf-file-name="RAW_NEWS_FILE.txt" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/Market/Nse_Modules/RAW_NEWS_FILE.txt">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="155">
+                  <caret line="95" column="81211" selection-start-line="95" selection-start-column="81202" selection-end-line="95" selection-end-column="81211" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Filtered_News_File.txt" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Market/Nse_Modules/Filtered_News_File.txt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="341">
-                  <caret line="332" column="49" lean-forward="true" selection-start-line="332" selection-start-column="49" selection-end-line="332" selection-end-column="49" />
+                <state relative-caret-position="66">
+                  <caret line="3" column="17" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="17" />
                 </state>
               </provider>
             </entry>
@@ -212,14 +223,12 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ICICI</find>
       <find>icici</find>
       <find>gati</find>
       <find>HDFC</find>
       <find>markets/</find>
       <find>markets/stocks/</find>
       <find>industry</find>
-      <find>hdfc</find>
       <find>ambani</find>
       <find>motocorp</find>
       <find>LOG</find>
@@ -236,12 +245,14 @@
       <find>dail</find>
       <find>dealing</find>
       <find>lose</find>
-      <find>bloodbath</find>
       <find>bank</find>
       <find>ye</find>
       <find>$</find>
-      <find>reli</find>
       <find>profit rise</find>
+      <find>jio</find>
+      <find>hdfc</find>
+      <find>bloodbath</find>
+      <find>reli</find>
     </findStrings>
     <replaceStrings>
       <replace>SHARE_CAPITAL_INDEX</replace>
@@ -348,24 +359,7 @@
             <path>
               <item name="Machine_Learning1" type="b2602c69:ProjectViewProjectNode" />
               <item name="Machine_Learning1" type="462c0819:PsiDirectoryNode" />
-              <item name="Market" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Machine_Learning1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Machine_Learning1" type="462c0819:PsiDirectoryNode" />
-              <item name="Market" type="462c0819:PsiDirectoryNode" />
-              <item name="Nse_Modules" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Machine_Learning1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Machine_Learning1" type="462c0819:PsiDirectoryNode" />
-              <item name="Stock_News_Analysis" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Machine_Learning1" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Machine_Learning1" type="462c0819:PsiDirectoryNode" />
-              <item name="Stock_News_Analysis" type="462c0819:PsiDirectoryNode" />
-              <item name="Clean_Data" type="462c0819:PsiDirectoryNode" />
+              <item name="Helpers" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -462,7 +456,7 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="Nsepy_Tests" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="Possible_Stock_Names" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Machine_Learning" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -470,12 +464,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Market" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Stock_News_Analysis/Clean_Data" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Market/Nsepy_Tests.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Stock_News_Analysis/Clean_Data/Possible_Stock_Names.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -502,18 +496,18 @@
     </configuration>
     <list>
       <item itemvalue="Python.Get_ET_Archieved_News" />
-      <item itemvalue="Python.Nsepy_Tests" />
       <item itemvalue="Python.NLP_Practice" />
       <item itemvalue="Python.Clean_News_Data_File" />
       <item itemvalue="Python.Prepare_Data_Stats_For_Analysis" />
+      <item itemvalue="Python.Possible_Stock_Names" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.Prepare_Data_Stats_For_Analysis" />
+        <item itemvalue="Python.Possible_Stock_Names" />
         <item itemvalue="Python.Get_ET_Archieved_News" />
         <item itemvalue="Python.Clean_News_Data_File" />
         <item itemvalue="Python.NLP_Practice" />
-        <item itemvalue="Python.Nsepy_Tests" />
       </list>
     </recent_temporary>
   </component>
@@ -861,12 +855,12 @@
       <window_info anchor="bottom" id="Messages" order="0" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50053704" side_tool="true" weight="0.69196427" />
       <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="9" visible="true" weight="0.31919643" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.2845982" />
       <window_info anchor="bottom" id="Python Console" order="13" weight="0.6640625" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.49946293" weight="0.3470982" />
-      <window_info anchor="bottom" id="Terminal" order="12" weight="0.31138393" />
+      <window_info active="true" anchor="bottom" id="Run" order="3" sideWeight="0.49946293" visible="true" weight="0.5625" />
+      <window_info anchor="bottom" id="Terminal" order="12" weight="0.24553572" />
       <window_info anchor="right" id="Remote Host" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24113856" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27389902" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24973147" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="4" weight="0.32975295" />
@@ -882,6 +876,32 @@
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
     </layout>
+    <layout-to-restore>
+      <window_info anchor="bottom" id="Debug" order="4" weight="0.3984375" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24973147" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.2845982" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" id="Remote Host" order="3" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.05048335" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="7" />
+      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
+      <window_info active="true" anchor="bottom" id="Run" order="3" sideWeight="0.49946293" visible="true" weight="0.5691964" />
+      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="2" />
+      <window_info anchor="right" x="0" y="0" width="296" height="588" id="Documentation" order="6" side_tool="true" weight="0.3295626" />
+      <window_info anchor="right" id="Database" order="4" weight="0.32975295" />
+      <window_info anchor="bottom" id="Terminal" order="12" weight="0.24553572" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50053704" side_tool="true" weight="0.69196427" />
+      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
+      <window_info anchor="right" id="SciView" order="5" weight="0.55692804" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="1" />
+      <window_info anchor="bottom" id="Messages" order="0" />
+      <window_info anchor="bottom" id="Python Console" order="13" weight="0.6640625" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -923,27 +943,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Pandas_Practice/Operations_On_Df_Columns.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="11" column="22" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Pandas_Practice/Pandas_Helpers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Pandas_Practice/Creating_Df_From_Csv.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Pandas_Practice/Get_NaN_Index_And_Columns.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
@@ -1194,13 +1193,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Market/Nse_Modules/RAW_NEWS_FILE.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27140">
-          <caret line="95" column="97641" selection-start-line="95" selection-start-column="97630" selection-end-line="95" selection-end-column="97641" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Helpers/Logging.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="66">
@@ -1234,8 +1226,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Stock_News_Analysis/Clean_Data/Rough">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="26" column="16" lean-forward="true" selection-end-line="49" selection-end-column="10" />
+        <state relative-caret-position="121">
+          <caret line="27" column="10" lean-forward="true" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -1251,18 +1243,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Market/Nse_Modules/Get_ET_Archieved_News.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="81" selection-start-line="81" selection-end-line="88" selection-end-column="35" />
+        <state relative-caret-position="177">
+          <caret line="81" column="43" selection-start-line="81" selection-start-column="38" selection-end-line="81" selection-end-column="43" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Stock_News_Analysis/Clean_Data/Possible_Stock_Names.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="36" column="32" selection-start-line="36" selection-start-column="32" selection-end-line="36" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -1275,17 +1260,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Market/Nse_Modules/Filtered_News_File.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="332" column="49" lean-forward="true" selection-start-line="332" selection-start-column="49" selection-end-line="332" selection-end-column="49" />
+        <state relative-caret-position="66">
+          <caret line="3" column="17" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Stock_News_Analysis/Clean_Data/Possible_Stock_Names.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="48" column="49" selection-start-line="48" selection-start-column="49" selection-end-line="48" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Market/Nse_Modules/RAW_NEWS_FILE.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="95" column="81211" selection-start-line="95" selection-start-column="81202" selection-end-line="95" selection-end-column="81211" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Stock_News_Analysis/Clean_Data/Prepare_Data_Stats_For_Analysis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="35" column="24" lean-forward="true" selection-start-line="35" selection-start-column="24" selection-end-line="35" selection-end-column="24" />
+        <state relative-caret-position="308">
+          <caret line="29" selection-start-line="29" selection-end-line="29" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Market/Nse_Modules/Get_Nse_Scrips.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Market/Nse_Modules/pivot_stratergy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-679">
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Helpers/Helpers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2640">
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>

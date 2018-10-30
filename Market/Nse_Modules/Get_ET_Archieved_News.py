@@ -1,18 +1,16 @@
 import requests
 import configparser
-import re
+import re, os
 import datetime as Dt
-
+from Helpers.Logging import Info, Critical, Debug
 ET_Config = configparser.ConfigParser()
 ET_Config.read("ET_Config.ini")
-# print (type(ET_Config), ET_Config)
-# print (ET_Config.get("ET_Urls", "News_Archieve_Url"))
-ET_News_Archieve_General_Url = ET_Config.get("ET_Urls", "News_Archieve_Url")
-RAW_NEWS_FILE = ET_Config.get("ET_News_Archieve_Code", "RAW_NEWS_FILE")
-Filtered_News_File = ET_Config.get("ET_News_Archieve_Code", "Filtered_News_File")
+ET_News_Archieve_General_Url = "https://economictimes.indiatimes.com/archivelist/year-2018,month-4,starttime-42005.cms"
+RAW_NEWS_FILE = "RAW_NEWS_FILE.txt"
+Filtered_News_File = "Filtered_News_File.txt"
 re_industry = r'<a.*?[markets|news|industry].*?cms">(.*?)</a>'
 
-
+News_Files_dir = os.path.join(os.path.dirname(__file__), "News_Files")
 
 
 
@@ -27,8 +25,13 @@ class Get_ET_News:
         Filtered_News_File - stores only text from the Html - all in small
 
         """
+        Info("Parsing ET news for date :{}".format(Date))
         self.Date = Date
-        print (self.Date)
+        self.Raw_News_File = os.path.join(News_Files_dir,  self.Date+"_"+"raw_news_file.txt")
+        self.Filtered_News_File = os.path.join(News_Files_dir,  self.Date+"_"+"filtered_news_file.txt")
+        News_Archieve_Url = self.Form_News_Archieve_Url_From_Date(self.Date)
+        self.Save_Raw_News(News_Archieve_Url)
+        self.Filter_News()
 
     def Form_News_Archieve_Url_From_Date(self, Date):
         """
@@ -38,11 +41,11 @@ class Get_ET_News:
             calculates the days between 1_jan_2005 and user data
             adds diff date with 1_jan_2005 date to get new datecode and forms url
         """
-        Jan_1_2015_Code = ET_Config.get("ET_News_Archieve_Code", "1_Jan_2015")
+        Jan_1_2015_Code = '42005'#ET_Config.get("ET_News_Archieve_Code", "1_Jan_2015")
         Days_Between = (Dt.datetime.strptime(Date, '%Y%m%d') - Dt.datetime.strptime('20150101', '%Y%m%d')).days
         Required_ET_Archieve_Code = int(Jan_1_2015_Code) + int(Days_Between)
         News_Archieve_Url = re.sub(Jan_1_2015_Code, str(Required_ET_Archieve_Code), ET_News_Archieve_General_Url)
-        print (News_Archieve_Url)
+        Info("Parsing Url: {}".format(News_Archieve_Url))
         return News_Archieve_Url
 
     def Save_Raw_News(self, News_Archieve_Url):
@@ -51,7 +54,7 @@ class Get_ET_News:
         :return: saves html elements from the given url in a file
         """
         News = requests.get(News_Archieve_Url)
-        News_File = open(RAW_NEWS_FILE, 'w+')
+        News_File = open(self.Raw_News_File, 'w+')
 
         for line in News.text:
             try:
@@ -59,12 +62,9 @@ class Get_ET_News:
             except UnicodeEncodeError:
                 continue
 
-    def Get_All_News(self):
-        pass
-
     def Filter_News(self):
-        News_File = open(RAW_NEWS_FILE, 'r')
-        Filtered_File = open(Filtered_News_File, 'w+')
+        News_File = open(self.Raw_News_File, 'r')
+        Filtered_File = open(self.Filtered_News_File, 'w+')
         for line in News_File:
             News = re.findall(re_industry, line)
             for i in News[:-2]:
@@ -77,6 +77,7 @@ class Get_ET_News:
             # print(i)
         Filtered_File.close()
         News_File.close()
+        Info("Filtered News is stored in : {}".format(self.Filtered_News_File))
 
 
     def Get_News_Sepcific_Scrip(self, Scrip):
@@ -87,8 +88,10 @@ class Get_ET_News:
         for line in Filtered_File:
             if Scrip in line:
                 print (Scrip, line)
-                
 
-ET_News = Get_ET_News('20181017')
-ET_News.Get_News_Sepcific_Scrip('hero motocorp')
+    def __del__(self):
+        pass
+
+# ET_News = Get_ET_News('20181023')
+# ET_News.Get_News_Sepcific_Scrip('hero motocorp')
 # ET_News.Filter_News()

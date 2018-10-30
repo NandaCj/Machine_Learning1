@@ -117,13 +117,15 @@ class Stock_Price:
         try:
             Info("Getting Close Price on {}".format(S_Date))
             Close_Price = get_history(symbol=Stock_Id, start=S_Date, end=S_Date)['Close'].get_values()[0]
+            Prev_Close = get_history(symbol=Stock_Id, start=S_Date, end=S_Date)['Prev Close'].get_values()[0]
+
         except Exception as err:
             Critical(err)
             Critical("No Close Price for this month Hence Returing 0 ")
             return 0
 
         Info("{} Close Price on {} = {}".format(Stock_Id, S_Date, Close_Price))
-        return Close_Price
+        return Close_Price, Prev_Close
 
     def Get_Close_Price_On_Month_End(self, Stock_Id='', Month='', Year = ''):
         LDate = Date_Helpers().Last_Working_Day(month=Month, year=Year)

@@ -12,9 +12,9 @@ Porter_Stemmer = PorterStemmer()
 Lancaster_Stemmer = LancasterStemmer()
 WordNet_Lemmatizer = WordNetLemmatizer()
 Root_Dir = "C:/Users/nandpara/PycharmProjects/Machine_Learning1"
-News_File = Root_Dir + '/Market/Nse_Modules/Filtered_News_File.txt'
+Filtered_News_File_Dir = Root_Dir + '/Market/Nse_Modules/News_Files/'
 Cleaned_News_File = os.path.join(os.path.dirname(__file__), 'Cleaned_News_File.txt')
-Debug(News_File)
+Debug(Filtered_News_File_Dir)
 From_Line = 0
 To_Line = 999999
 
@@ -27,21 +27,23 @@ class Clean_News_Data():
     4.filter stopwords
     5.lemmatize - map to root word
     """
-    def __init__(self, File_Path):
-        Info("Cleaning each and Every News Line")
-        self.New_File_Opened = open(News_File, 'r+')
-        News = self.Make_News_File_generator(self.New_File_Opened)
+    def __init__(self, Date):
+        self.Date = Date
+        Filtered_News_File = Filtered_News_File_Dir + Date + "_filtered_news_file.txt"
+        self.News_File_Opened = open(Filtered_News_File, 'r+')
+        News = self.Make_News_File_generator(self.News_File_Opened)
         Cleaned_News_list = self.Remove_Punctuations_and_If_Alpha(News)
         Filtered_News = self.Filter_Stop_words(Cleaned_News_list)
         Stem_Words_News_List = self.Get_Stem_Words(Filtered_News)
         Lemmatize_News_Words_List = self.Lemmatize_News_Words(Stem_Words_News_List)
-        self.Store_Cleaned_News(Lemmatize_News_Words_List)
+        self.Store_Cleaned_News(set(Lemmatize_News_Words_List))
 
     def Log_It(self, *args):
         for arg in args:
             Debug(arg)
 
     def Store_Cleaned_News(self, Lemmatize_News_Words_List):
+        Cleaned_News_File = os.path.join(os.path.dirname(__file__), "Cleaned_Files/" + self.Date + "_Cleaned_News.txt")
         clean_news_file = open(Cleaned_News_File, 'w+')
         for clean_news in Lemmatize_News_Words_List:
             clean_news_file.write(clean_news +'\n')
@@ -124,6 +126,7 @@ class Clean_News_Data():
 
 
     def __del__(self):
-        self.New_File_Opened.close()
+        self.News_File_Opened.close()
 
-Clean_News_Data(News_File)
+# Clean_News_Data(Date='20181023')
+

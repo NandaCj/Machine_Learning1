@@ -7,6 +7,7 @@ from nltk.stem import WordNetLemmatizer
 import timeit
 from Helpers.Logging import Critical, Info, Debug
 import string
+from Stock_News_Analysis.Clean_Data.Possible_Stock_Names import get_all_stocks_possible_names
 
 Porter_Stemmer = PorterStemmer()
 Lancaster_Stemmer = LancasterStemmer()
@@ -36,6 +37,7 @@ class Clean_News_Data():
         Filtered_News = self.Filter_Stop_words(Cleaned_News_list)
         Stem_Words_News_List = self.Get_Stem_Words(Filtered_News)
         Lemmatize_News_Words_List = self.Lemmatize_News_Words(Stem_Words_News_List)
+        Cleaned_News = self.Remove_Stock_Names_From_News(Lemmatize_News_Words_List)
         self.Store_Cleaned_News(set(Lemmatize_News_Words_List))
 
     def Log_It(self, *args):
@@ -123,6 +125,21 @@ class Clean_News_Data():
             Lemmatize_News_Words_List.append(tmp_news)
             self.Log_It(tmp_news)
         return Lemmatize_News_Words_List
+
+    def Remove_Stock_Names_From_News(self, Lemmatize_News_Words_List):
+        all_stocks_possible_names = get_all_stocks_possible_names()
+        Cleaned_News = []
+        for each_news in Lemmatize_News_Words_List:
+            tmp_news = each_news
+            news_words = word_tokenize(each_news)
+            for each_word in news_words:
+                if each_word in all_stocks_possible_names:
+                    each_news = re.sub(r'\\b{}\\b'.format(each_news), '', each_news)
+            self.Log_It(tmp_news, each_news)
+
+
+
+
 
 
     def __del__(self):

@@ -1,13 +1,15 @@
 from Market.Nse_Modules.Get_ET_Archieved_News import Get_ET_News
 from Stock_News_Analysis.Clean_Data.Clean_Filtered_News import Clean_News_Data
 from Stock_News_Analysis.Clean_Data.Make_News_To_Stock_Correlation import Map_News_To_Stock_Next_Day_Change
+from Alogorithm_Implementation.Bayes import Bayes
+from Helpers.Helpers import Print_Helpers
 import pandas as pd
 import os
-from sklearn.naive_bayes import BernoulliNB, MultinomialNB
 
-MultiNB = MultinomialNB()
-Bernoulli = BernoulliNB()
-
+BayesObj = Bayes()
+Deco_Print = Print_Helpers().Decorate_And_Print
+News = 'News'
+Class = 'Class'
 class Predict_News_Strength():
 
     def __init__(self,
@@ -34,21 +36,21 @@ class Predict_News_Strength():
         print(News_Class_Df[['News', 'Class']])
         return News_Class_Df
 
-    def Train_Bayes_Model(self):
-        from sklearn.preprocessing import OneHotEncoder
-        from sklearn.preprocessing import LabelEncoder
-        le = LabelEncoder()
-        encoder = OneHotEncoder()
-        News_Class_Df = self.Prepare_New_Class_Dataframe()
+    def Train_MultiNB(self):
+        News_Class = self.Prepare_New_Class_Dataframe()
+        Vectorizer, Transformer, MultiNB_Predictor = BayesObj.Apply_MultinomialNB(News_Class[News], News_Class[Class])
+        return Vectorizer, Transformer, MultiNB_Predictor
 
-        # # le.fit(News_Class_Df['News'])
-        # News_Class_Df = News_Class_Df['News'].apply(le.fit_transform)
-        # print(News_Class_Df)
+    def MultiNB_Predict(self, MultiNB_Predictor, Predict_This):
+        Predicted = MultiNB_Predictor.predict(Predict_This)
+        Deco_Print(Predicted)
 
-        News_Class_Df = News_Class_Df[:-5].apply(le.fit_transform)
-        print(News_Class_Df[-5:])
-        MultiNB.fit(X=News_Class_Df['News'].values.reshape(-1,1), y=News_Class_Df['Class'])
-        print(News_Class_Df['News'].values.reshape(-1,1))
-        print(MultiNB.predict(News_Class_Df['News'].values.reshape(-1,1)))
-obj = Predict_News_Strength(Date='20181023')
-obj.Train_Bayes_Model()
+
+
+if __name__ == "__main__":
+    obj = Predict_News_Strength(Date='20181023')
+    Vectorizer, Transformer, MultiNB_Predictor = obj.Train_MultiNB()
+    Predict_This = ["crore profit rise r "]
+    Predict_This = Vectorizer.transform(Predict_This)
+    Predict_This = Transformer.transform(Predict_This)
+    obj.MultiNB_Predict(MultiNB_Predictor, Predict_This=Predict_This)

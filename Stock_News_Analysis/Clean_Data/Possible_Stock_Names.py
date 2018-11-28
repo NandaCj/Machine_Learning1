@@ -1,11 +1,11 @@
-Nifty50 = {'ADANIPORTS':['adaniports', 'adani ports'],
-            'ASIANPAINT':['asaianpaint', 'asaian paint'],
-            'AXISBANK':['axisbank', 'axis bank'],
+Nifty50 = {'ADANIPORTS':['adani ports', 'adaniports'],
+            'ASIANPAINT':['asaian paint', 'asaianpaint'],
+            'AXISBANK':['axis bank', 'axisbank'],
             'BAJAJ-AUTO':['bajaj-auto' 'bajaj auto'],
-            'BAJFINANCE':['bajfinance'],
-            'BAJAJFINSV':['bajajfinsv', 'bajaj finsv'],
+            'BAJFINANCE':['bajaj fin', 'bajfinance'],
+            'BAJAJFINSV':['bajaj finsv', 'bajajfinsv'],
             'BPCL':['bpcl'],
-            'BHARTIARTL':['bharti aitel', 'airtel'],
+            'BHARTIARTL':['bharti airtel', 'airtel'],
             'INFRATEL':['infratel'],
             'CIPLA':['cipla'],
             'COALINDIA':['coal india', 'coalindia'],
@@ -13,8 +13,8 @@ Nifty50 = {'ADANIPORTS':['adaniports', 'adani ports'],
             'EICHERMOT':['eicher', 'eicher motors'],
             'GAIL':['gail'],
             'GRASIM':['grasim'],
-            'HCLTECH':['hcltech', 'hcl'],
-            'HDFCBANK':['hdfcbank', 'hdfc bank'],
+            'HCLTECH':['hcl tech', 'hcl'],
+            'HDFCBANK':['hdfc bank', 'hdfcbank'],
             'HEROMOTOCO':['hero', 'hero motorcorp'],
             'HINDALCO':['hindalco'],
             'HINDPETRO':['hindpetro'],
@@ -48,3 +48,13 @@ Nifty50 = {'ADANIPORTS':['adaniports', 'adani ports'],
             'WIPRO':['wipro'],
             'YESBANK':['ye', 'ye bank', 'yes bank'],
             'ZEEL':[]}
+
+
+def get_all_stocks_possible_names():
+    possible_names = []
+    for stock, possible_name in Nifty50.items():
+        for name in possible_name:
+            possible_names.append(name)
+    return possible_names
+
+# print(get_all_stocks_possible_names())

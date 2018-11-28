@@ -8,7 +8,8 @@ ET_Config.read("ET_Config.ini")
 ET_News_Archieve_General_Url = "https://economictimes.indiatimes.com/archivelist/year-2018,month-4,starttime-42005.cms"
 RAW_NEWS_FILE = "RAW_NEWS_FILE.txt"
 Filtered_News_File = "Filtered_News_File.txt"
-re_industry = r'<a.*?[markets|news|industry].*?cms">(.*?)</a>'
+re_industry = r'<a.*?[markets|news|industry|!recos].*?cms">(.*?)</a>'
+Un_wanted_News_File = "C:\Users\nandpara\PycharmProjects\Machine_Learning1\Stock_News_Analysis\Clean_Data\Cleaned_Files\UnWanted_News.txt"
 
 News_Files_dir = os.path.join(os.path.dirname(__file__), "News_Files")
 
@@ -29,6 +30,7 @@ class Get_ET_News:
         self.Date = Date
         self.Raw_News_File = os.path.join(News_Files_dir,  self.Date+"_"+"raw_news_file.txt")
         self.Filtered_News_File = os.path.join(News_Files_dir,  self.Date+"_"+"filtered_news_file.txt")
+        self.Un_wanted_News_File = os.path.join(News_Files_dir, "UnWanted_News.txt")
         News_Archieve_Url = self.Form_News_Archieve_Url_From_Date(self.Date)
         self.Save_Raw_News(News_Archieve_Url)
         self.Filter_News()
@@ -65,18 +67,40 @@ class Get_ET_News:
     def Filter_News(self):
         News_File = open(self.Raw_News_File, 'r')
         Filtered_File = open(self.Filtered_News_File, 'w+')
+        NoNews_File = open(self.Un_wanted_News_File, 'w+')
         for line in News_File:
             News = re.findall(re_industry, line)
             for i in News[:-2]:
                 if "img class" in i or "img height" in i or "input class" in i:
                     continue
-                if len(i) < 10:
+                if len(i) < 10 or len(i.split()) <= 5:
+                    NoNews_File.write(i)
+                    NoNews_File.write("\n")
                     continue
+                if re.search(r'^[Buy|Sel].*target.*:', i):
+                    NoNews_File.write("Recos-->"+ i)
+                    NoNews_File.write("\n")
+                    continue
+                if re.search(r'^[Share|Stock|share|stock].*[m|M]arket.*[u|U]pdate', i):
+                    NoNews_File.write("Updates-->"+ i)
+                    NoNews_File.write("\n")
+                    continue
+                if re.search(r'^[Buzzing stocks]', i):
+                    NoNews_File.write("Buzzing stocks-->"+ i)
+                    NoNews_File.write("\n")
+                    continue
+
+                if re.search(r'^[Stocks in the news]', i):
+                    NoNews_File.write("Stocks in News-->" + i)
+                    NoNews_File.write("\n")
+                    continue
+
                 Filtered_File.write(i.lower())
                 Filtered_File.write("\n")
             # print(i)
         Filtered_File.close()
         News_File.close()
+        NoNews_File.close()
         Info("Filtered News is stored in : {}".format(self.Filtered_News_File))
 
 

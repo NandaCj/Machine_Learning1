@@ -7,7 +7,7 @@ from datetime import date, timedelta
 from nsepy import get_history
 
 Log_Format = "%(asctime)s %(levelname)s [%(name)s] %(message)s"
-logging.basicConfig(level='DEBUG', format=Log_Format)
+logging.basicConfig(level='CRITICAL', format=Log_Format)
 logger = logging.getLogger(__name__)
 Info = logger.info
 Critical = logger.critical
@@ -141,8 +141,12 @@ class Stock_Price:
         return CPrice
 
 
+class Print_Helpers:
 
-
+    def Decorate_And_Print(self, Print_This):
+        print("---------------------------------------")
+        print("|", Print_This, '|')
+        print("---------------------------------------")
 
 
 

@@ -1,0 +1,1 @@
+ k = "https://www.toptal.com/python/python-class-attributes-an-overly-thorough-guide"
